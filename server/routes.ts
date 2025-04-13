@@ -249,7 +249,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Placeholder for images
   app.get("/api/images/:imageName", (req, res) => {
     const imageName = req.params.imageName;
-    const locationNames = ['nemo', 'montelbaanstoren', 'nieuwmarkt', 'waag', 'begijnhof', '9streets', 'annefrank', 'jordaan'];
+    const locationNames = [
+      'nemo', 'montelbaanstoren', 'nieuwmarkt', 'waag', 
+      'zeedijk', 'hehua', 'damsquare', 'royalpalace', 
+      'begijnhof', 'canals', '9streets', 'westerkerk', 
+      'annefrank', 'jordaan'
+    ];
     
     // Generate placeholder SVG with location name
     const locationPrefix = locationNames.find(loc => imageName.startsWith(loc)) || 'amsterdam';

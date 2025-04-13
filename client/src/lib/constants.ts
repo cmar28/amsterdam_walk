@@ -25,7 +25,7 @@ export const FONTS = {
 
 // Tour information
 export const TOUR_INFO = {
-  title: 'Amsterdam Family Walking Tour',
+  title: 'Carlo\'s Amsterdam Tour',
   subtitle: 'NEMO to Jordaan',
   totalDistance: '3 km (1.8 miles)',
   totalStops: 7,

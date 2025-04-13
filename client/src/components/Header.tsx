@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchToggle }) => {
         >
           <Menu className="h-6 w-6" />
         </button>
-        <h1 className="font-heading font-bold text-lg text-[#004D7F]">Amsterdam Family Tour</h1>
+        <h1 className="font-heading font-bold text-lg text-[#004D7F]">Carlo's Amsterdam Tour</h1>
       </div>
       <div className="flex items-center">
         <button 

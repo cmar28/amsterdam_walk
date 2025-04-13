@@ -1,0 +1,104 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#E8EAF0"/>
+  
+  <!-- Sky -->
+  <rect width="100%" height="150" fill="#A5CAE5"/>
+  
+  <!-- Canal water -->
+  <rect y="150" width="600" height="250" fill="#4A7BA3"/>
+  
+  <!-- Amsterdam canal houses - Left side -->
+  <rect x="50" y="50" width="50" height="100" fill="#D18B62" stroke="#AF7451" stroke-width="1"/>
+  <rect x="100" y="50" width="50" height="100" fill="#E8DCC5" stroke="#C7BCA7" stroke-width="1"/>
+  <rect x="150" y="50" width="50" height="100" fill="#AE5D5D" stroke="#8E4C4C" stroke-width="1"/>
+  <rect x="200" y="50" width="50" height="100" fill="#D8AF87" stroke="#B69472" stroke-width="1"/>
+  
+  <!-- Amsterdam canal houses - Right side -->
+  <rect x="350" y="50" width="50" height="100" fill="#C18C60" stroke="#9F7350" stroke-width="1"/>
+  <rect x="400" y="50" width="50" height="100" fill="#D8C1A7" stroke="#B6A389" stroke-width="1"/>
+  <rect x="450" y="50" width="50" height="100" fill="#7C9EA7" stroke="#678189" stroke-width="1"/>
+  <rect x="500" y="50" width="50" height="100" fill="#E2CDC7" stroke="#BFAEA9" stroke-width="1"/>
+  
+  <!-- House roofs - Left side -->
+  <path d="M50,50 L100,50 L75,30 Z" fill="#8B5D3A" stroke="#704A2E" stroke-width="1"/>
+  <path d="M100,50 L150,50 L125,20 Z" fill="#A3826A" stroke="#816555" stroke-width="1"/>
+  <path d="M150,50 L200,50 L175,30 Z" fill="#703B3B" stroke="#5A2F2F" stroke-width="1"/>
+  <path d="M200,50 L250,50 L225,25 Z" fill="#A67F58" stroke="#876645" stroke-width="1"/>
+  
+  <!-- House roofs - Right side -->
+  <path d="M350,50 L400,50 L375,30 Z" fill="#8B5D3A" stroke="#704A2E" stroke-width="1"/>
+  <path d="M400,50 L450,50 L425,20 Z" fill="#A3826A" stroke="#816555" stroke-width="1"/>
+  <path d="M450,50 L500,50 L475,30 Z" fill="#51696E" stroke="#415458" stroke-width="1"/>
+  <path d="M500,50 L550,50 L525,25 Z" fill="#B39F9A" stroke="#8F7D79" stroke-width="1"/>
+  
+  <!-- House windows - Left side -->
+  <rect x="60" y="70" width="12" height="20" fill="#D5E7F2" stroke="#D18B62" stroke-width="1"/>
+  <rect x="80" y="70" width="12" height="20" fill="#D5E7F2" stroke="#D18B62" stroke-width="1"/>
+  <rect x="60" y="100" width="12" height="20" fill="#D5E7F2" stroke="#D18B62" stroke-width="1"/>
+  <rect x="80" y="100" width="12" height="20" fill="#D5E7F2" stroke="#D18B62" stroke-width="1"/>
+  
+  <rect x="110" y="70" width="12" height="20" fill="#D5E7F2" stroke="#E8DCC5" stroke-width="1"/>
+  <rect x="130" y="70" width="12" height="20" fill="#D5E7F2" stroke="#E8DCC5" stroke-width="1"/>
+  <rect x="110" y="100" width="12" height="20" fill="#D5E7F2" stroke="#E8DCC5" stroke-width="1"/>
+  <rect x="130" y="100" width="12" height="20" fill="#D5E7F2" stroke="#E8DCC5" stroke-width="1"/>
+  
+  <rect x="160" y="70" width="12" height="20" fill="#D5E7F2" stroke="#AE5D5D" stroke-width="1"/>
+  <rect x="180" y="70" width="12" height="20" fill="#D5E7F2" stroke="#AE5D5D" stroke-width="1"/>
+  <rect x="160" y="100" width="12" height="20" fill="#D5E7F2" stroke="#AE5D5D" stroke-width="1"/>
+  <rect x="180" y="100" width="12" height="20" fill="#D5E7F2" stroke="#AE5D5D" stroke-width="1"/>
+  
+  <rect x="210" y="70" width="12" height="20" fill="#D5E7F2" stroke="#D8AF87" stroke-width="1"/>
+  <rect x="230" y="70" width="12" height="20" fill="#D5E7F2" stroke="#D8AF87" stroke-width="1"/>
+  <rect x="210" y="100" width="12" height="20" fill="#D5E7F2" stroke="#D8AF87" stroke-width="1"/>
+  <rect x="230" y="100" width="12" height="20" fill="#D5E7F2" stroke="#D8AF87" stroke-width="1"/>
+  
+  <!-- House windows - Right side -->
+  <rect x="360" y="70" width="12" height="20" fill="#D5E7F2" stroke="#C18C60" stroke-width="1"/>
+  <rect x="380" y="70" width="12" height="20" fill="#D5E7F2" stroke="#C18C60" stroke-width="1"/>
+  <rect x="360" y="100" width="12" height="20" fill="#D5E7F2" stroke="#C18C60" stroke-width="1"/>
+  <rect x="380" y="100" width="12" height="20" fill="#D5E7F2" stroke="#C18C60" stroke-width="1"/>
+  
+  <rect x="410" y="70" width="12" height="20" fill="#D5E7F2" stroke="#D8C1A7" stroke-width="1"/>
+  <rect x="430" y="70" width="12" height="20" fill="#D5E7F2" stroke="#D8C1A7" stroke-width="1"/>
+  <rect x="410" y="100" width="12" height="20" fill="#D5E7F2" stroke="#D8C1A7" stroke-width="1"/>
+  <rect x="430" y="100" width="12" height="20" fill="#D5E7F2" stroke="#D8C1A7" stroke-width="1"/>
+  
+  <rect x="460" y="70" width="12" height="20" fill="#D5E7F2" stroke="#7C9EA7" stroke-width="1"/>
+  <rect x="480" y="70" width="12" height="20" fill="#D5E7F2" stroke="#7C9EA7" stroke-width="1"/>
+  <rect x="460" y="100" width="12" height="20" fill="#D5E7F2" stroke="#7C9EA7" stroke-width="1"/>
+  <rect x="480" y="100" width="12" height="20" fill="#D5E7F2" stroke="#7C9EA7" stroke-width="1"/>
+  
+  <rect x="510" y="70" width="12" height="20" fill="#D5E7F2" stroke="#E2CDC7" stroke-width="1"/>
+  <rect x="530" y="70" width="12" height="20" fill="#D5E7F2" stroke="#E2CDC7" stroke-width="1"/>
+  <rect x="510" y="100" width="12" height="20" fill="#D5E7F2" stroke="#E2CDC7" stroke-width="1"/>
+  <rect x="530" y="100" width="12" height="20" fill="#D5E7F2" stroke="#E2CDC7" stroke-width="1"/>
+  
+  <!-- Canal bridge -->
+  <path d="M250,150 C300,100 300,100 350,150" fill="none" stroke="#8B7F6D" stroke-width="15"/>
+  <rect x="250" y="145" width="100" height="5" fill="#8B7F6D"/>
+  
+  <!-- Canal boats -->
+  <rect x="100" y="200" width="80" height="25" rx="10" ry="10" fill="#3D5A45" stroke="#2E4535" stroke-width="2"/>
+  <rect x="110" y="180" width="60" height="20" rx="5" ry="5" fill="#3D5A45" stroke="#2E4535" stroke-width="1"/>
+  
+  <rect x="400" y="220" width="100" height="30" rx="15" ry="15" fill="#644436" stroke="#4D3429" stroke-width="2"/>
+  <rect x="420" y="200" width="60" height="20" rx="5" ry="5" fill="#644436" stroke="#4D3429" stroke-width="1"/>
+  
+  <rect x="200" y="250" width="70" height="20" rx="10" ry="10" fill="#993333" stroke="#752626" stroke-width="2"/>
+  
+  <!-- People on bridge -->
+  <circle cx="280" cy="130" r="5" fill="#4E5975"/>
+  <rect x="277" y="135" width="6" height="10" fill="#4E5975"/>
+  
+  <circle cx="300" cy="130" r="5" fill="#774C43"/>
+  <rect x="297" y="135" width="6" height="10" fill="#774C43"/>
+  
+  <circle cx="320" cy="130" r="5" fill="#546954"/>
+  <rect x="317" y="135" width="6" height="10" fill="#546954"/>
+  
+  <!-- Title -->
+  <text x="300" y="380" font-family="Arial" font-size="20" text-anchor="middle" fill="#333333" font-weight="bold">
+    The Canal Belt
+  </text>
+</svg>

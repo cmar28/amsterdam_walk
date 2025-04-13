@@ -1,0 +1,89 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#E8EAF0"/>
+  
+  <!-- Sky -->
+  <rect width="100%" height="150" fill="#A5CAE5"/>
+  
+  <!-- Street -->
+  <rect y="250" width="600" height="150" fill="#8E8E8E"/>
+  
+  <!-- Canal water -->
+  <rect y="150" width="600" height="100" fill="#4A7BA3"/>
+  
+  <!-- Bridge over canal -->
+  <path d="M250,150 C300,110 300,110 350,150" fill="none" stroke="#8B7F6D" stroke-width="15"/>
+  <rect x="250" y="145" width="100" height="5" fill="#8B7F6D"/>
+  
+  <!-- Amsterdam canal houses - Left side -->
+  <rect x="50" y="50" width="40" height="100" fill="#D18B62" stroke="#AF7451" stroke-width="1"/>
+  <rect x="90" y="50" width="40" height="100" fill="#E8DCC5" stroke="#C7BCA7" stroke-width="1"/>
+  <rect x="130" y="50" width="40" height="100" fill="#AE5D5D" stroke="#8E4C4C" stroke-width="1"/>
+  <rect x="170" y="50" width="40" height="100" fill="#D8AF87" stroke="#B69472" stroke-width="1"/>
+  
+  <!-- Amsterdam canal houses - Right side -->
+  <rect x="390" y="50" width="40" height="100" fill="#C18C60" stroke="#9F7350" stroke-width="1"/>
+  <rect x="430" y="50" width="40" height="100" fill="#D8C1A7" stroke="#B6A389" stroke-width="1"/>
+  <rect x="470" y="50" width="40" height="100" fill="#7C9EA7" stroke="#678189" stroke-width="1"/>
+  <rect x="510" y="50" width="40" height="100" fill="#E2CDC7" stroke="#BFAEA9" stroke-width="1"/>
+  
+  <!-- House details - Left side -->
+  <path d="M50,50 L90,50 L70,35 Z" fill="#8B5D3A" stroke="#704A2E" stroke-width="1"/>
+  <path d="M90,50 L130,50 L110,30 Z" fill="#A3826A" stroke="#816555" stroke-width="1"/>
+  <path d="M130,50 L170,50 L150,35 Z" fill="#703B3B" stroke="#5A2F2F" stroke-width="1"/>
+  <path d="M170,50 L210,50 L190,35 Z" fill="#A67F58" stroke="#876645" stroke-width="1"/>
+  
+  <!-- House details - Right side -->
+  <path d="M390,50 L430,50 L410,35 Z" fill="#8B5D3A" stroke="#704A2E" stroke-width="1"/>
+  <path d="M430,50 L470,50 L450,30 Z" fill="#A3826A" stroke="#816555" stroke-width="1"/>
+  <path d="M470,50 L510,50 L490,35 Z" fill="#51696E" stroke="#415458" stroke-width="1"/>
+  <path d="M510,50 L550,50 L530,35 Z" fill="#B39F9A" stroke="#8F7D79" stroke-width="1"/>
+  
+  <!-- Boutique store fronts -->
+  <rect x="100" y="250" width="80" height="70" fill="#D5B894" stroke="#B39A7C" stroke-width="2"/>
+  <rect x="115" y="270" width="50" height="50" fill="#E8DCC5"/> <!-- Shop window -->
+  <text x="140" y="300" font-family="Arial" font-size="8" text-anchor="middle" fill="#333333">BOUTIQUE</text>
+  
+  <rect x="220" y="250" width="80" height="70" fill="#C7D9DD" stroke="#A5B5B8" stroke-width="2"/>
+  <rect x="235" y="270" width="50" height="50" fill="#DFF2F7"/> <!-- Shop window -->
+  <text x="260" y="300" font-family="Arial" font-size="8" text-anchor="middle" fill="#333333">VINTAGE</text>
+  
+  <rect x="340" y="250" width="80" height="70" fill="#E0C1B3" stroke="#BBA297" stroke-width="2"/>
+  <rect x="355" y="270" width="50" height="50" fill="#F2E0D5"/> <!-- Shop window -->
+  <text x="380" y="300" font-family="Arial" font-size="8" text-anchor="middle" fill="#333333">GALLERY</text>
+  
+  <rect x="460" y="250" width="80" height="70" fill="#D0D6B3" stroke="#ADB396" stroke-width="2"/>
+  <rect x="475" y="270" width="50" height="50" fill="#ECF2CB"/> <!-- Shop window -->
+  <text x="500" y="300" font-family="Arial" font-size="8" text-anchor="middle" fill="#333333">CAFÉ</text>
+  
+  <!-- Street Signs -->
+  <rect x="50" y="180" width="30" height="15" fill="#FFFFFF" stroke="#333333" stroke-width="1"/>
+  <text x="65" y="192" font-family="Arial" font-size="8" text-anchor="middle" fill="#333333">REESTRAAT</text>
+  
+  <rect x="520" y="180" width="30" height="15" fill="#FFFFFF" stroke="#333333" stroke-width="1"/>
+  <text x="535" y="192" font-family="Arial" font-size="8" text-anchor="middle" fill="#333333">BERENSTRAAT</text>
+  
+  <!-- People on the street -->
+  <circle cx="150" cy="330" r="6" fill="#4E5975"/>
+  <rect x="147" y="336" width="6" height="12" fill="#4E5975"/>
+  
+  <circle cx="280" cy="350" r="6" fill="#774C43"/>
+  <rect x="277" y="356" width="6" height="12" fill="#774C43"/>
+  
+  <circle cx="420" cy="340" r="6" fill="#546954"/>
+  <rect x="417" y="346" width="6" height="12" fill="#546954"/>
+  
+  <!-- Bicycles -->
+  <circle cx="200" cy="340" r="6" fill="none" stroke="#333" stroke-width="1"/>
+  <circle cx="220" cy="340" r="6" fill="none" stroke="#333" stroke-width="1"/>
+  <path d="M200,340 L220,340 M200,340 L210,320 L220,340" stroke="#333" stroke-width="1" fill="none"/>
+  
+  <circle cx="350" cy="360" r="6" fill="none" stroke="#333" stroke-width="1"/>
+  <circle cx="370" cy="360" r="6" fill="none" stroke="#333" stroke-width="1"/>
+  <path d="M350,360 L370,360 M350,360 L360,340 L370,360" stroke="#333" stroke-width="1" fill="none"/>
+  
+  <!-- Title -->
+  <text x="300" y="380" font-family="Arial" font-size="20" text-anchor="middle" fill="#333333" font-weight="bold">
+    The Nine Streets (De 9 Straatjes)
+  </text>
+</svg>

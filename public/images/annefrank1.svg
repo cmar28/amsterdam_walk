@@ -1,0 +1,84 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#E8EAF0"/>
+  
+  <!-- Sky -->
+  <rect width="100%" height="150" fill="#A5CAE5"/>
+  
+  <!-- Canal -->
+  <rect y="300" width="600" height="100" fill="#4A7BA3"/>
+  
+  <!-- Canal bank -->
+  <rect y="290" width="600" height="10" fill="#8C7F6D"/>
+  
+  <!-- Anne Frank House Building -->
+  <rect x="200" y="90" width="200" height="200" fill="#9E8772" stroke="#7D6A5A" stroke-width="2"/>
+  
+  <!-- Building details -->
+  <rect x="230" y="110" width="40" height="50" fill="#E9DCC7" stroke="#9E8772" stroke-width="1"/> <!-- Window -->
+  <rect x="300" y="110" width="40" height="50" fill="#E9DCC7" stroke="#9E8772" stroke-width="1"/> <!-- Window -->
+  <rect x="230" y="180" width="40" height="50" fill="#E9DCC7" stroke="#9E8772" stroke-width="1"/> <!-- Window -->
+  <rect x="300" y="180" width="40" height="50" fill="#E9DCC7" stroke="#9E8772" stroke-width="1"/> <!-- Window -->
+  
+  <!-- Building door -->
+  <rect x="260" y="230" width="50" height="60" fill="#6D4C36" stroke="#5A3F2D" stroke-width="2"/>
+  <rect x="280" y="235" width="10" height="10" fill="#B5945F" stroke="#8C7248" stroke-width="1"/> <!-- Door detail -->
+  
+  <!-- House roof details -->
+  <path d="M200,90 L400,90 L300,60 Z" fill="#826957" stroke="#695548" stroke-width="2"/>
+  
+  <!-- Adjacent buildings -->
+  <rect x="100" y="110" width="100" height="180" fill="#B09783" stroke="#8C7968" stroke-width="2"/>
+  <rect x="400" y="110" width="100" height="180" fill="#A89386" stroke="#857569" stroke-width="2"/>
+  
+  <!-- Adjacent building windows -->
+  <rect x="120" y="130" width="25" height="35" fill="#E9DCC7" stroke="#B09783" stroke-width="1"/>
+  <rect x="155" y="130" width="25" height="35" fill="#E9DCC7" stroke="#B09783" stroke-width="1"/>
+  <rect x="120" y="180" width="25" height="35" fill="#E9DCC7" stroke="#B09783" stroke-width="1"/>
+  <rect x="155" y="180" width="25" height="35" fill="#E9DCC7" stroke="#B09783" stroke-width="1"/>
+  <rect x="120" y="230" width="25" height="35" fill="#E9DCC7" stroke="#B09783" stroke-width="1"/>
+  <rect x="155" y="230" width="25" height="35" fill="#E9DCC7" stroke="#B09783" stroke-width="1"/>
+  
+  <rect x="420" y="130" width="25" height="35" fill="#E9DCC7" stroke="#A89386" stroke-width="1"/>
+  <rect x="455" y="130" width="25" height="35" fill="#E9DCC7" stroke="#A89386" stroke-width="1"/>
+  <rect x="420" y="180" width="25" height="35" fill="#E9DCC7" stroke="#A89386" stroke-width="1"/>
+  <rect x="455" y="180" width="25" height="35" fill="#E9DCC7" stroke="#A89386" stroke-width="1"/>
+  <rect x="420" y="230" width="25" height="35" fill="#E9DCC7" stroke="#A89386" stroke-width="1"/>
+  <rect x="455" y="230" width="25" height="35" fill="#E9DCC7" stroke="#A89386" stroke-width="1"/>
+  
+  <!-- Memorial plaque -->
+  <rect x="260" y="200" width="50" height="20" fill="#E1D5C7" stroke="#B8AEA3" stroke-width="1"/>
+  
+  <!-- People viewing the house -->
+  <circle cx="220" cy="320" r="8" fill="#4E5975"/>
+  <rect x="216" y="328" width="8" height="15" fill="#4E5975"/>
+  
+  <circle cx="250" cy="325" r="8" fill="#774C43"/>
+  <rect x="246" y="333" width="8" height="15" fill="#774C43"/>
+  
+  <circle cx="280" cy="330" r="8" fill="#546954"/>
+  <rect x="276" y="338" width="8" height="15" fill="#546954"/>
+  
+  <circle cx="320" cy="320" r="8" fill="#774C76"/>
+  <rect x="316" y="328" width="8" height="15" fill="#774C76"/>
+  
+  <circle cx="350" cy="325" r="8" fill="#6B4C36"/>
+  <rect x="346" y="333" width="8" height="15" fill="#6B4C36"/>
+  
+  <!-- Queue of visitors -->
+  <path d="M150,320 C170,320 190,325 210,325 L210,325" fill="none" stroke="#333333" stroke-width="1" stroke-dasharray="2,2"/>
+  
+  <!-- Bicycles -->
+  <circle cx="180" cy="350" r="6" fill="none" stroke="#333" stroke-width="1"/>
+  <circle cx="200" cy="350" r="6" fill="none" stroke="#333" stroke-width="1"/>
+  <path d="M180,350 L200,350 M180,350 L190,335 L200,350" stroke="#333" stroke-width="1" fill="none"/>
+  
+  <circle cx="380" cy="360" r="6" fill="none" stroke="#333" stroke-width="1"/>
+  <circle cx="400" cy="360" r="6" fill="none" stroke="#333" stroke-width="1"/>
+  <path d="M380,360 L400,360 M380,360 L390,345 L400,360" stroke="#333" stroke-width="1" fill="none"/>
+  
+  <!-- Title -->
+  <text x="300" y="380" font-family="Arial" font-size="20" text-anchor="middle" fill="#333333" font-weight="bold">
+    Anne Frank House
+  </text>
+</svg>

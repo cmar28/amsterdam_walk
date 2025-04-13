@@ -246,7 +246,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Placeholder for images
+  // Tour images - using SVG files from public/images directory
   app.get("/api/images/:imageName", (req, res) => {
     const imageName = req.params.imageName;
     const locationNames = [
@@ -256,7 +256,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       'annefrank', 'jordaan'
     ];
     
-    // Generate placeholder SVG with location name
+    // Check if we have a real image for this location
+    const svgFilename = `${imageName.split('.')[0]}.svg`;
+    const svgPath = path.join(process.cwd(), 'public', 'images', svgFilename);
+    
+    // Try to serve the SVG file if it exists
+    if (fs.existsSync(svgPath)) {
+      try {
+        const svgContent = fs.readFileSync(svgPath, 'utf8');
+        res.setHeader('Content-Type', 'image/svg+xml');
+        return res.send(svgContent);
+      } catch (error) {
+        console.error(`Error reading SVG file ${svgPath}:`, error);
+      }
+    }
+    
+    // Fallback to placeholder if the SVG file doesn't exist
     const locationPrefix = locationNames.find(loc => imageName.startsWith(loc)) || 'amsterdam';
     const width = 600;
     const height = 400;

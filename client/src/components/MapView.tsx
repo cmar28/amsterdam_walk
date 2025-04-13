@@ -104,7 +104,7 @@ const MapView: React.FC<MapViewProps> = ({
     });
   }, [tourStops, currentStopId, onStopSelect]);
 
-  // Render route paths
+  // Render walking route paths
   useEffect(() => {
     if (!leafletMapRef.current || !routePaths.length) return;
 
@@ -115,18 +115,56 @@ const MapView: React.FC<MapViewProps> = ({
     routePathsRef.current.forEach(path => path.remove());
     routePathsRef.current = [];
 
-    // Add new paths
+    // Add new walking route paths
     routePaths.forEach(path => {
-      const coordinates = path.coordinates.map(coord => [coord.lat, coord.lng]);
+      // Get the start and end points for this route segment
+      const startStop = tourStops.find(stop => stop.id === path.fromStopId);
+      const endStop = tourStops.find(stop => stop.id === path.toStopId);
       
+      if (!startStop || !endStop) return;
+      
+      // Create start and end points for the walking route
+      const startPoint = [startStop.latitude, startStop.longitude];
+      const endPoint = [endStop.latitude, endStop.longitude];
+      
+      // Since we're simulating walking routes, add intermediate points between stops
+      // This creates a more natural-looking route with turns along streets
+      const coordinates = [startPoint];
+      
+      // Add the waypoints from the route path to create a more natural-looking walking route
+      path.coordinates.forEach(coord => {
+        coordinates.push([coord.lat, coord.lng]);
+      });
+      
+      coordinates.push(endPoint);
+      
+      // Create a solid walking route line with a different style than the dashed line
       const routeLine = L.polyline(coordinates, {
-        color: '#FF6B35',
-        weight: 4,
+        color: '#FF6B35', // Orange route color
+        weight: 5,        // Slightly thicker
         opacity: 0.8,
-        dashArray: '8, 4',
+        lineCap: 'round',
+        lineJoin: 'round',
+        className: 'walking-route'
       }).addTo(map);
       
-      routePathsRef.current.push(routeLine);
+      // Add walking route markers (dots) along the path to indicate walking directions
+      const walkingMarkers = [];
+      for (let i = 1; i < coordinates.length - 1; i++) {
+        // Add a small marker at each bend in the path
+        const dotMarker = L.circleMarker(coordinates[i], {
+          radius: 3,
+          color: '#FF6B35',
+          fillColor: '#FFFFFF',
+          fillOpacity: 1,
+          weight: 2
+        }).addTo(map);
+        
+        walkingMarkers.push(dotMarker);
+      }
+      
+      // Add all path elements to the ref for cleanup
+      routePathsRef.current.push(routeLine, ...walkingMarkers);
     });
   }, [routePaths]);
 

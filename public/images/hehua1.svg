@@ -1,0 +1,67 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#E8EAF0"/>
+  
+  <!-- Sky -->
+  <rect width="100%" height="220" fill="#B3D0E5"/>
+  
+  <!-- Street/ground -->
+  <rect y="220" width="600" height="180" fill="#858585"/>
+  
+  <!-- He Hua Temple Building -->
+  <!-- Main structure -->
+  <rect x="150" y="80" width="300" height="140" fill="#E53935" stroke="#B71C1C" stroke-width="3"/>
+  
+  <!-- Temple Roof -->
+  <path d="M120,80 L480,80 L450,30 L150,30 Z" fill="#4CAF50" stroke="#2E7D32" stroke-width="3"/>
+  <path d="M150,30 L450,30 L430,10 L170,10 Z" fill="#388E3C" stroke="#1B5E20" stroke-width="2"/>
+  
+  <!-- Golden roof details -->
+  <path d="M200,30 L210,10 M250,30 L260,10 M300,30 L310,10 M350,30 L360,10 M400,30 L410,10" stroke="#FFC107" stroke-width="3"/>
+  
+  <!-- Dragon roof ornaments -->
+  <path d="M150,30 C145,25 140,15 135,30" stroke="#FFC107" stroke-width="2" fill="none"/>
+  <path d="M450,30 C455,25 460,15 465,30" stroke="#FFC107" stroke-width="2" fill="none"/>
+  <circle cx="135" cy="25" r="3" fill="#FFC107"/>
+  <circle cx="465" cy="25" r="3" fill="#FFC107"/>
+  
+  <!-- Entrance -->
+  <rect x="250" y="150" width="100" height="70" fill="#D32F2F" stroke="#B71C1C" stroke-width="2"/>
+  <rect x="260" y="160" width="80" height="60" fill="#212121"/>
+  
+  <!-- Chinese archway -->
+  <path d="M200,150 L400,150 L370,120 L230,120 Z" fill="#E53935" stroke="#B71C1C" stroke-width="2"/>
+  
+  <!-- Chinese characters (simplified) -->
+  <text x="300" y="140" font-family="Arial" font-size="20" text-anchor="middle" fill="#FFC107" font-weight="bold">
+    荷華寺
+  </text>
+  
+  <!-- Guardian lions -->
+  <circle cx="210" cy="190" r="15" fill="#B0955B" stroke="#8A7342" stroke-width="1"/>
+  <circle cx="390" cy="190" r="15" fill="#B0955B" stroke="#8A7342" stroke-width="1"/>
+  
+  <!-- People on the street -->
+  <circle cx="150" cy="280" r="8" fill="#3F51B5"/>
+  <rect x="146" y="288" width="8" height="15" fill="#3F51B5"/>
+  
+  <circle cx="190" cy="270" r="8" fill="#9C27B0"/>
+  <rect x="186" y="278" width="8" height="15" fill="#9C27B0"/>
+  
+  <circle cx="450" cy="290" r="8" fill="#009688"/>
+  <rect x="446" y="298" width="8" height="15" fill="#009688"/>
+  
+  <!-- Chinese shop signs -->
+  <rect x="100" y="120" width="40" height="30" fill="#F44336" stroke="#B71C1C" stroke-width="1"/>
+  <rect x="460" y="130" width="40" height="30" fill="#F44336" stroke="#B71C1C" stroke-width="1"/>
+  
+  <!-- Street lanterns -->
+  <path d="M120,120 L120,150 M480,130 L480,160" stroke="#B71C1C" stroke-width="1"/>
+  <circle cx="120" cy="160" r="10" fill="#FFC107" stroke="#FF9800" stroke-width="1"/>
+  <circle cx="480" cy="170" r="10" fill="#FFC107" stroke="#FF9800" stroke-width="1"/>
+  
+  <!-- Title -->
+  <text x="300" y="380" font-family="Arial" font-size="20" text-anchor="middle" fill="#333333" font-weight="bold">
+    Fo Guang Shan He Hua Temple
+  </text>
+</svg>

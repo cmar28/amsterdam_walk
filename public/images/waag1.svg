@@ -1,0 +1,64 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#E8EAF0"/>
+  
+  <!-- Sky -->
+  <rect width="100%" height="250" fill="#B3D0E5"/>
+  
+  <!-- Plaza/ground -->
+  <rect y="250" width="600" height="150" fill="#B8B2A2"/>
+  
+  <!-- The Waag building -->
+  <rect x="150" y="100" width="300" height="150" fill="#B59476" stroke="#9A7C62" stroke-width="2"/>
+  
+  <!-- Main entrance - rounded door -->
+  <path d="M280,200 Q300,180 320,200 L320,250 L280,250 Z" fill="#6D4C36" stroke="#5A3F2D" stroke-width="2"/>
+  
+  <!-- Towers -->
+  <!-- Left tower -->
+  <rect x="150" y="70" width="60" height="30" fill="#B59476" stroke="#9A7C62" stroke-width="2"/>
+  <path d="M150,70 L180,40 L210,70 Z" fill="#937859" stroke="#7A644A" stroke-width="2"/>
+  
+  <!-- Right tower -->
+  <rect x="390" y="70" width="60" height="30" fill="#B59476" stroke="#9A7C62" stroke-width="2"/>
+  <path d="M390,70 L420,40 L450,70 Z" fill="#937859" stroke="#7A644A" stroke-width="2"/>
+  
+  <!-- Center tower -->
+  <rect x="270" y="50" width="60" height="50" fill="#B59476" stroke="#9A7C62" stroke-width="2"/>
+  <path d="M270,50 L300,20 L330,50 Z" fill="#937859" stroke="#7A644A" stroke-width="2"/>
+  
+  <!-- Windows -->
+  <rect x="180" y="120" width="30" height="45" fill="#D5C7B7" stroke="#B59476" stroke-width="1"/>
+  <rect x="240" y="120" width="30" height="45" fill="#D5C7B7" stroke="#B59476" stroke-width="1"/>
+  <rect x="330" y="120" width="30" height="45" fill="#D5C7B7" stroke="#B59476" stroke-width="1"/>
+  <rect x="390" y="120" width="30" height="45" fill="#D5C7B7" stroke="#B59476" stroke-width="1"/>
+  
+  <!-- Stone details -->
+  <rect x="150" y="180" width="300" height="5" fill="#937859"/>
+  <rect x="150" y="110" width="300" height="5" fill="#937859"/>
+  
+  <!-- People in the plaza -->
+  <circle cx="200" cy="300" r="8" fill="#4E5975"/>
+  <rect x="196" y="308" width="8" height="15" fill="#4E5975"/>
+  
+  <circle cx="240" cy="290" r="8" fill="#774C43"/>
+  <rect x="236" y="298" width="8" height="15" fill="#774C43"/>
+  
+  <circle cx="380" cy="310" r="8" fill="#546954"/>
+  <rect x="376" y="318" width="8" height="15" fill="#546954"/>
+  
+  <circle cx="420" cy="300" r="8" fill="#774C76"/>
+  <rect x="416" y="308" width="8" height="15" fill="#774C76"/>
+  
+  <!-- Market stalls in the background -->
+  <rect x="100" y="280" width="40" height="20" fill="#F5F5F5" stroke="#DDD" stroke-width="1"/>
+  <rect x="95" y="270" width="50" height="10" fill="#7A9CC0" stroke="#6581A0" stroke-width="1"/>
+  
+  <rect x="460" y="285" width="40" height="20" fill="#F5F5F5" stroke="#DDD" stroke-width="1"/>
+  <rect x="455" y="275" width="50" height="10" fill="#C97F68" stroke="#A66956" stroke-width="1"/>
+  
+  <!-- Title -->
+  <text x="300" y="380" font-family="Arial" font-size="20" text-anchor="middle" fill="#333333" font-weight="bold">
+    The Waag at Nieuwmarkt
+  </text>
+</svg>

@@ -11,7 +11,7 @@ async function initializeTourData() {
     {
       title: "NEMO Science Museum",
       subtitle: "Starting point - The distinctive green hull-shaped museum",
-      description: "We begin at NEMO Science Museum, the large green building shaped like a ship's hull rising from the water. This striking structure was designed by famed architect Renzo Piano and opened in 1997. Renzo Piano wanted NEMO to evoke Amsterdam's seafaring history – indeed, it looks like a giant ship emerging from the harbor. Inside NEMO are five floors of hands-on science exhibits, where kids and adults can experiment and play.",
+      description: "We begin at NEMO Science Museum, the large green building shaped like a ship's hull rising from the water. This striking structure was designed by famed architect Renzo Piano and opened in 1997. Renzo Piano wanted NEMO to evoke Amsterdam's seafaring history – indeed, it looks like a giant ship emerging from the harbor! Standing here, you might imagine you're on the bow of a boat about to sail. NEMO is actually built atop a tunnel that runs under the water, and its roof doubles as a public square with cascading steps. Inside NEMO are five floors of hands-on science exhibits (the largest science center in the Netherlands), where kids and adults can experiment and play. From the rooftop terrace, you get a panoramic view of Amsterdam's old city center.",
       kidsContent: "Inside NEMO are five floors of hands-on science exhibits, where kids and adults can experiment and play. You can blow giant bubbles and learn about water, electricity, and light through fun activities! Fun fact: The roof of NEMO is actually a public square where you can see a great view of Amsterdam!",
       orderNumber: 1,
       latitude: 52.374,
@@ -25,7 +25,7 @@ async function initializeTourData() {
     {
       title: "Montelbaanstoren",
       subtitle: "Medieval Tower - The old brick tower with a white steeple",
-      description: "Here we are at Montelbaanstoren, a picturesque 16th-century tower on the canal Oudeschans. This brick tower was originally built around 1512–1516 as part of Amsterdam's medieval city wall. Imagine back then: city guards stood watch here, scanning for enemy ships on the waterways. Today, Montelbaanstoren stands peacefully by houseboats and bikes, a reminder of Amsterdam's maritime past.",
+      description: "Here we are at Montelbaanstoren, a picturesque 16th-century tower on the canal Oudeschans. This brick tower was originally built around 1512–1516 as part of Amsterdam's medieval city wall. Imagine back then: city guards stood watch here, scanning for enemy ships on the waterways. As you look up, notice the upper section is a different color – the elegant cream-colored clock tower was added later, in 1606. Montelbaanstoren has a fun nickname: 'Malle Jaap,' meaning 'Silly Jack' in Dutch. Why silly? Well, when the new clock and bells were installed, they had a mind of their own – the bells would often chime at odd hours or not at all, confusing everyone! This spot was also a gathering point for sailors in the 1600s. Today, Montelbaanstoren stands peacefully by houseboats and bikes, a reminder of Amsterdam's maritime past.",
       kidsContent: "Montelbaanstoren has a fun nickname: 'Malle Jaap,' meaning 'Silly Jack' in Dutch. Why silly? Well, when the new clock and bells were installed, they had a mind of their own – the bells would often chime at odd hours or not at all, confusing everyone!",
       orderNumber: 2,
       latitude: 52.3725,

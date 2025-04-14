@@ -246,7 +246,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Tour images - serving from public/images directory
+  // Tour images - serving JPG files from public/images directory
   app.get("/api/images/:imageName", (req, res) => {
     const imageName = req.params.imageName;
     const basename = imageName.split('.')[0];
@@ -257,7 +257,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       'annefrank', 'jordaan'
     ];
     
-    // First try to find a JPG file
+    // Try to find the JPG file
     const jpgFilename = `${basename}.jpg`;
     const jpgPath = path.join(process.cwd(), 'public', 'images', jpgFilename);
     
@@ -271,22 +271,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     }
     
-    // Fallback to SVG if JPG doesn't exist
-    const svgFilename = `${basename}.svg`;
-    const svgPath = path.join(process.cwd(), 'public', 'images', svgFilename);
-    
-    // Try to serve the SVG file if it exists
-    if (fs.existsSync(svgPath)) {
-      try {
-        const svgContent = fs.readFileSync(svgPath, 'utf8');
-        res.setHeader('Content-Type', 'image/svg+xml');
-        return res.send(svgContent);
-      } catch (error) {
-        console.error(`Error reading SVG file ${svgPath}:`, error);
-      }
-    }
-    
-    // Fallback to placeholder if neither JPG nor SVG file exists
+    // Fallback to a placeholder if the JPG doesn't exist
     const locationPrefix = locationNames.find(loc => imageName.startsWith(loc)) || 'amsterdam';
     const width = 600;
     const height = 400;
@@ -298,7 +283,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ${locationPrefix.toUpperCase()} Tour Image
       </text>
       <text x="50%" y="60%" font-family="Arial" font-size="16" text-anchor="middle" fill="#666666">
-        (Placeholder for ${imageName})
+        Image not found for: ${imageName}
       </text>
     </svg>
     `;

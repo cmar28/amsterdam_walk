@@ -250,11 +250,24 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
                 Back to Audio
               </button>
             </div>
-            <div className="prose text-sm">
-              {/* This would normally contain the transcript text */}
-              <p>
-                {currentStop.description}
-              </p>
+            <div className="prose text-sm max-w-none">
+              {/* Regular tour stop description */}
+              <div className="mb-4">
+                <h4 className="font-semibold text-base mb-1">About {currentStop.title.split(' ')[0]}</h4>
+                <p className="whitespace-pre-line">
+                  {currentStop.description}
+                </p>
+              </div>
+              
+              {/* Kids content section in transcript */}
+              {currentStop.kidsContent && (
+                <div className="mt-4 bg-[#004D7F] bg-opacity-10 p-4 rounded-lg border border-[#004D7F] border-opacity-20">
+                  <h4 className="font-semibold text-base mb-1">For Kids</h4>
+                  <p className="whitespace-pre-line">
+                    {currentStop.kidsContent}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         )}

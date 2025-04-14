@@ -16,7 +16,7 @@ async function initializeTourData() {
       orderNumber: 1,
       latitude: 52.374175,
       longitude: 4.912442,
-      audioUrl: "/api/audio/stop1.mp3", // This would be a placeholder for actual audio file
+      audioUrl: "/api/audio/stop1_short.mp3", // Short audio sample for testing
       duration: "10 minutes",
       nextStopWalkingTime: "5-7 minutes",
       walkingTip: "From NEMO, walk west along the pedestrian bridge and follow the waterfront path towards the small canal. Keep the water on your right. Montelbaanstoren – the old brick tower with a white steeple – will be straight ahead on the canal bank.",

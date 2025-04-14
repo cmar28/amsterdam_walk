@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Play, Pause, File } from 'lucide-react';
+import { Howl } from 'howler';
 
 interface AudioPlayerProps {
   audioUrl: string;
@@ -11,14 +12,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, title, onToggleTran
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [howl, setHowl] = useState<any>(null);
-  const [howlId, setHowlId] = useState<number | null>(null);
+  const [howl, setHowl] = useState<Howl | null>(null);
+  const [howlId, setHowlId] = useState<number | undefined>(undefined);
   const progressIntervalRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Initialize Howl if window.Howl exists
-    if (window.Howl && audioUrl) {
-      const sound = new window.Howl({
+    // Initialize Howl with the audio URL
+    if (audioUrl) {
+      const sound = new Howl({
         src: [audioUrl],
         html5: true,
         preload: true,

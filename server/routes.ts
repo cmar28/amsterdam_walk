@@ -30,7 +30,7 @@ async function initializeTourData() {
       orderNumber: 2,
       latitude: 52.3712,
       longitude: 4.9087,
-      audioUrl: "/api/audio/stop2.mp3",
+      audioUrl: "/api/audio/stop1_short.mp3", // Temporary using same audio for all stops
       duration: "5 minutes",
       nextStopWalkingTime: "5-7 minutes",
       walkingTip: "Cross the bridge next to Montelbaanstoren and continue west down the street Sint Antoniesbreestraat. You'll pass through a short street with shops and then arrive at an open square with a castle-like building in the middle – that's Nieuwmarkt and the Waag.",
@@ -44,7 +44,7 @@ async function initializeTourData() {
       orderNumber: 3,
       latitude: 52.3728,
       longitude: 4.9004,
-      audioUrl: "/api/audio/stop3.mp3",
+      audioUrl: "/api/audio/stop1_short.mp3", // Temporary using same audio for all stops
       duration: "45 minutes (including lunch)",
       nextStopWalkingTime: "5 minutes",
       walkingTip: "From the Waag, walk north across the square and take the street Zeedijk heading towards a large Chinese-style gateway in the distance. You'll notice Chinese shops and restaurants as we enter Chinatown.",

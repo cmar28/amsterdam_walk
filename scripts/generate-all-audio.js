@@ -29,7 +29,7 @@ const TOUR_GUIDE_VOICE = VOICES.fable;
 async function loadTourStops() {
   try {
     // Import directly from storage
-    const { storage } = await import('../server/storage.js');
+    const { storage } = await import('../server/storage.ts');
     return await storage.getTourStops();
   } catch (error) {
     console.error('Error loading tour stops:', error);

@@ -104,68 +104,14 @@ const MapView: React.FC<MapViewProps> = ({
     });
   }, [tourStops, currentStopId, onStopSelect]);
 
-  // Render walking route paths
+  // Route paths rendering is disabled as requested
+  // We'll only show the stop markers without the connecting routes
   useEffect(() => {
-    if (!leafletMapRef.current || !routePaths.length) return;
-
-    const L = window.L;
-    const map = leafletMapRef.current;
-
-    // Clear existing paths
-    routePathsRef.current.forEach(path => path.remove());
-    routePathsRef.current = [];
-
-    // Add new walking route paths
-    routePaths.forEach(path => {
-      // Get the start and end points for this route segment
-      const startStop = tourStops.find(stop => stop.id === path.fromStopId);
-      const endStop = tourStops.find(stop => stop.id === path.toStopId);
-      
-      if (!startStop || !endStop) return;
-      
-      // Create start and end points for the walking route
-      const startPoint = [startStop.latitude, startStop.longitude];
-      const endPoint = [endStop.latitude, endStop.longitude];
-      
-      // Since we're simulating walking routes, add intermediate points between stops
-      // This creates a more natural-looking route with turns along streets
-      const coordinates = [startPoint];
-      
-      // Add the waypoints from the route path to create a more natural-looking walking route
-      path.coordinates.forEach(coord => {
-        coordinates.push([coord.lat, coord.lng]);
-      });
-      
-      coordinates.push(endPoint);
-      
-      // Create a solid walking route line with a different style than the dashed line
-      const routeLine = L.polyline(coordinates, {
-        color: '#FF6B35', // Orange route color
-        weight: 5,        // Slightly thicker
-        opacity: 0.8,
-        lineCap: 'round',
-        lineJoin: 'round',
-        className: 'walking-route'
-      }).addTo(map);
-      
-      // Add walking route markers (dots) along the path to indicate walking directions
-      const walkingMarkers = [];
-      for (let i = 1; i < coordinates.length - 1; i++) {
-        // Add a small marker at each bend in the path
-        const dotMarker = L.circleMarker(coordinates[i], {
-          radius: 3,
-          color: '#FF6B35',
-          fillColor: '#FFFFFF',
-          fillOpacity: 1,
-          weight: 2
-        }).addTo(map);
-        
-        walkingMarkers.push(dotMarker);
-      }
-      
-      // Add all path elements to the ref for cleanup
-      routePathsRef.current.push(routeLine, ...walkingMarkers);
-    });
+    // Clear any existing paths whenever this component updates
+    if (leafletMapRef.current) {
+      routePathsRef.current.forEach(path => path.remove());
+      routePathsRef.current = [];
+    }
   }, [routePaths]);
 
   // Update user location marker when position changes

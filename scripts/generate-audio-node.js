@@ -1,7 +1,6 @@
-import OpenAI from 'openai';
+import { OpenAI } from 'openai';
 import fs from 'fs';
 import path from 'path';
-import { TourStop } from '../shared/schema';
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -22,7 +21,7 @@ const VOICES = {
 const TOUR_GUIDE_VOICE = VOICES.fable;
 
 // Function to generate transcript with kids content
-function generateTranscript(stop: TourStop): string {
+function generateTranscript(stop) {
   // Combine description with kids content for a complete transcript
   let transcript = stop.description;
   
@@ -34,7 +33,7 @@ function generateTranscript(stop: TourStop): string {
 }
 
 // Function to generate and save audio for a stop
-async function generateAudioForStop(stop: TourStop): Promise<string> {
+async function generateAudioForStop(stop) {
   try {
     console.log(`Generating audio for stop #${stop.orderNumber}: ${stop.title}`);
     
@@ -68,11 +67,11 @@ async function generateAudioForStop(stop: TourStop): Promise<string> {
   }
 }
 
-// Load tour stops data from routes.ts
-async function loadTourStops(): Promise<TourStop[]> {
+// Load tour stops data from server/storage.js
+async function loadTourStops() {
   try {
     // Import directly from storage
-    const { storage } = require('../server/storage');
+    const { storage } = await import('../server/storage.js');
     return await storage.getTourStops();
   } catch (error) {
     console.error('Error loading tour stops:', error);
@@ -81,7 +80,7 @@ async function loadTourStops(): Promise<TourStop[]> {
 }
 
 // Main function to generate all audio files
-async function generateAllAudio(): Promise<void> {
+async function generateAllAudio() {
   try {
     const tourStops = await loadTourStops();
     
@@ -96,7 +95,7 @@ async function generateAllAudio(): Promise<void> {
     const sortedStops = [...tourStops].sort((a, b) => a.orderNumber - b.orderNumber);
     
     // Process each stop and collect audio URLs
-    const audioUrls: Array<{ stopId: number; audioUrl: string }> = [];
+    const audioUrls = [];
     
     for (const stop of sortedStops) {
       const audioUrl = await generateAudioForStop(stop);

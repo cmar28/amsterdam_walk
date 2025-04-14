@@ -327,16 +327,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.send(svg);
   });
   
-  // Placeholder for audio files
-  app.get("/api/audio/:audioName", (req, res) => {
-    const audioName = req.params.audioName;
-    const stopNumber = audioName.replace(/[^0-9]/g, '');
+  // API route to serve audio files from the public/audio directory
+  app.get("/api/audio/:audioFileName", (req, res) => {
+    const audioFileName = req.params.audioFileName;
+    const audioPath = path.join(process.cwd(), 'public', 'audio', audioFileName);
     
-    res.setHeader('Content-Type', 'application/json');
-    res.json({
-      message: `Audio placeholder for stop ${stopNumber}. In a real application, this would serve an actual audio file.`,
-      audioUrl: req.originalUrl
-    });
+    // Check if the audio file exists
+    if (fs.existsSync(audioPath)) {
+      res.sendFile(audioPath);
+    } else {
+      // Fallback for audio files that haven't been generated yet
+      const stopNumber = audioFileName.replace(/[^0-9]/g, '');
+      
+      res.setHeader('Content-Type', 'application/json');
+      res.status(404).json({
+        message: `Audio file for stop ${stopNumber} not found. Run the audio generation script to create it.`,
+        audioUrl: req.originalUrl
+      });
+    }
   });
 
   // Create HTTP server

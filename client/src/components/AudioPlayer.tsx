@@ -79,7 +79,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, title, onToggleTran
     if (!howl) return;
     
     if (isPlaying) {
-      howl.pause(howlId);
+      howl.pause();
     } else {
       const id = howl.play();
       setHowlId(id);

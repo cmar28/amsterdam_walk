@@ -15,7 +15,7 @@ interface MapViewProps {
   tourStops: TourStop[];
   routePaths: RoutePath[];
   currentStopId: number;
-  onStopSelect: (stopId: number) => void;
+  onStopSelect: (stopId: number, switchToMap?: boolean) => void;
 }
 
 const MapView: React.FC<MapViewProps> = ({ 

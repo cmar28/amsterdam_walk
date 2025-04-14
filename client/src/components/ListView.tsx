@@ -6,7 +6,7 @@ import TourProgress from './TourProgress';
 interface ListViewProps {
   tourStops: TourStop[];
   currentStopId: number;
-  onStopSelect: (stopId: number) => void;
+  onStopSelect: (stopId: number, switchToMap?: boolean) => void;
 }
 
 const ListView: React.FC<ListViewProps> = ({ tourStops, currentStopId, onStopSelect }) => {
@@ -60,7 +60,7 @@ const ListView: React.FC<ListViewProps> = ({ tourStops, currentStopId, onStopSel
               
               <div className="mt-2">
                 <button 
-                  onClick={() => onStopSelect(stop.id)}
+                  onClick={() => onStopSelect(stop.id, false)}
                   className="text-[#004D7F] font-medium text-sm flex items-center"
                 >
                   <span>View details</span>

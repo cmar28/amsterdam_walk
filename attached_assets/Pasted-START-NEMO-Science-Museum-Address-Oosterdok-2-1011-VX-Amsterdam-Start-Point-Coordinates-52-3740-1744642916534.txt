@@ -1,0 +1,73 @@
+START: NEMO Science Museum
+Address: Oosterdok 2, 1011 VX Amsterdam
+
+Start Point Coordinates: 52.37403, 4.91243
+
+Step 1: Walk from NEMO to Montelbaanstoren
+Exit NEMO, walk west across the pedestrian bridge (Mr. J.J. van der Veldebrug).
+
+Continue straight along Oosterdokskade, which curves left into Oudeschans.
+
+Walk south along the canal until you reach the Montelbaanstoren.
+
+Stop Coordinates: 52.37139, 4.90870
+
+Step 2: Walk to Nieuwmarkt & In de Waag
+Continue west on Oudeschans, which becomes Sint Antoniesbreestraat.
+
+Walk straight through the small square past shops and restaurants.
+
+Enter Nieuwmarkt Square.
+
+Destination building: In de Waag (central castle-like building).
+
+Stop Coordinates: 52.37284, 4.90146
+
+Step 3: Walk up Zeedijk to He Hua Temple
+Exit Nieuwmarkt north along Zeedijk street (main Chinatown street).
+
+Walk 150 meters to Fo Guang Shan He Hua Temple, on your left.
+
+Stop Coordinates: 52.37424, 4.90030
+
+Step 4: Walk to Dam Square
+Continue southwest along Zeedijk, which becomes Geldersekade.
+
+Turn right (northwest) on Nieuwendijk or Warmoesstraat.
+
+Walk ~500 meters to Dam Square.
+
+Stop near the National Monument in the center of the square.
+
+Stop Coordinates: 52.37317, 4.89361
+
+Step 5: Walk to Begijnhof
+Exit Dam Square via Kalverstraat (southwest corner of the square).
+
+Walk ~300 meters to Spui Square.
+
+Enter Begijnhof through the passage at Spui 30.
+
+Stop Coordinates (courtyard center): 52.36840, 4.88986
+
+Step 6: Walk to Canal Belt / Nine Streets
+Exit Begijnhof onto Gedempte Begijnensloot → west to Spui.
+
+Cross Spui and walk west to Singel Canal.
+
+Turn right (north) on Singel, then left (west) onto Heisteeg.
+
+Begin walking through Nine Streets: Hartenstraat, Berenstraat, Reestraat.
+
+Continue west, crossing Herengracht, Keizersgracht, Prinsengracht.
+
+Stop Coordinates (Reestraat bridge over Prinsengracht): 52.36880, 4.88496
+
+Step 7: Walk to Jordaan, Westerkerk & Anne Frank House
+From Reestraat bridge, turn right (north) along Prinsengracht.
+
+Walk ~300 meters to Westerkerk tower and Anne Frank House at no. 263.
+
+Stop Coordinates (Anne Frank House): 52.37522, 4.88357
+
+Final Stop Coordinates (Westerkerk): 52.37557, 4.88390

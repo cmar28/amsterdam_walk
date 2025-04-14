@@ -14,8 +14,8 @@ async function initializeTourData() {
       description: "We begin at NEMO Science Museum, the large green building shaped like a ship's hull rising from the water. This striking structure was designed by famed architect Renzo Piano and opened in 1997. Renzo Piano wanted NEMO to evoke Amsterdam's seafaring history – indeed, it looks like a giant ship emerging from the harbor! Standing here, you might imagine you're on the bow of a boat about to sail. NEMO is actually built atop a tunnel that runs under the water, and its roof doubles as a public square with cascading steps. Inside NEMO are five floors of hands-on science exhibits (the largest science center in the Netherlands), where kids and adults can experiment and play. From the rooftop terrace, you get a panoramic view of Amsterdam's old city center.",
       kidsContent: "Inside NEMO are five floors of hands-on science exhibits, where kids and adults can experiment and play. You can blow giant bubbles and learn about water, electricity, and light through fun activities! Fun fact: The roof of NEMO is actually a public square where you can see a great view of Amsterdam!",
       orderNumber: 1,
-      latitude: 52.374,
-      longitude: 4.9126,
+      latitude: 52.37403,
+      longitude: 4.91243,
       audioUrl: "/api/audio/stop1.mp3", // This would be a placeholder for actual audio file
       duration: "10 minutes",
       nextStopWalkingTime: "5-7 minutes",
@@ -28,8 +28,8 @@ async function initializeTourData() {
       description: "Here we are at Montelbaanstoren, a picturesque 16th-century tower on the canal Oudeschans. This brick tower was originally built around 1512–1516 as part of Amsterdam's medieval city wall. Imagine back then: city guards stood watch here, scanning for enemy ships on the waterways. As you look up, notice the upper section is a different color – the elegant cream-colored clock tower was added later, in 1606. Montelbaanstoren has a fun nickname: 'Malle Jaap,' meaning 'Silly Jack' in Dutch. Why silly? Well, when the new clock and bells were installed, they had a mind of their own – the bells would often chime at odd hours or not at all, confusing everyone! This spot was also a gathering point for sailors in the 1600s. Today, Montelbaanstoren stands peacefully by houseboats and bikes, a reminder of Amsterdam's maritime past.",
       kidsContent: "Montelbaanstoren has a fun nickname: 'Malle Jaap,' meaning 'Silly Jack' in Dutch. Why silly? Well, when the new clock and bells were installed, they had a mind of their own – the bells would often chime at odd hours or not at all, confusing everyone!",
       orderNumber: 2,
-      latitude: 52.3725,
-      longitude: 4.9065,
+      latitude: 52.37139,
+      longitude: 4.90870,
       audioUrl: "/api/audio/stop2.mp3",
       duration: "5 minutes",
       nextStopWalkingTime: "5-7 minutes",
@@ -42,8 +42,8 @@ async function initializeTourData() {
       description: "Welcome to Nieuwmarkt, a lively square that has been a center of commerce for centuries. In Dutch, Nieuwmarkt means 'New Market,' and indeed markets have been held here since the 17th century when this area became a public square. The star of Nieuwmarkt is the Waag, the dramatic medieval building in the center that looks like a little castle with pointed towers. Believe it or not, this is one of Amsterdam's oldest buildings – built in 1488 as a city gate known as St. Anthony's Gate. Back then, Amsterdam's city wall ran right here, and this gate allowed entry into the city. When the city expanded, the walls came down, and by 1614 the moat around the gate was filled to create this market square. The old gate was repurposed as a weigh house, or 'Waag,' where merchants would weigh and trade goods like grain and butter. Today the Waag hosts a café/restaurant called In de Waag – and it's our lunch stop. Fun fact: The Waag is the oldest non-religious building in Amsterdam!",
       kidsContent: "This old building used to be a city gate where people entered Amsterdam. Later it became a place where they weighed goods like cheese and butter to make sure no one was cheating! Different groups of workers like blacksmiths and masons each had their own special room in the building.",
       orderNumber: 3,
-      latitude: 52.3725,
-      longitude: 4.9003,
+      latitude: 52.37284,
+      longitude: 4.90146,
       audioUrl: "/api/audio/stop3.mp3",
       duration: "45 minutes (including lunch)",
       nextStopWalkingTime: "5 minutes",
@@ -122,69 +122,104 @@ async function initializeTourData() {
     }
   ];
 
-  // Simple route path between stops (in real app, would be more detailed coordinates)
+  // Detailed walking route paths based on the provided description
   const routePaths = [
     {
+      // Step 1: NEMO to Montelbaanstoren
       fromStopId: 1,
       toStopId: 2,
       coordinates: [
-        {lat: 52.374, lng: 4.9126},
-        {lat: 52.3735, lng: 4.9105},
-        {lat: 52.3725, lng: 4.9065}
+        {lat: 52.37403, lng: 4.91243}, // NEMO starting point
+        {lat: 52.37382, lng: 4.91168}, // Cross the pedestrian bridge
+        {lat: 52.37360, lng: 4.91054}, // Along Oosterdokskade
+        {lat: 52.37322, lng: 4.90950}, // Oosterdokskade curves left
+        {lat: 52.37264, lng: 4.90902}, // Becoming Oudeschans
+        {lat: 52.37200, lng: 4.90885}, // Along the canal southward
+        {lat: 52.37139, lng: 4.90870}  // Arrive at Montelbaanstoren
       ]
     },
     {
+      // Step 2: Montelbaanstoren to Nieuwmarkt & In de Waag
       fromStopId: 2,
       toStopId: 3,
       coordinates: [
-        {lat: 52.3725, lng: 4.9065},
-        {lat: 52.3728, lng: 4.9040},
-        {lat: 52.3725, lng: 4.9003}
+        {lat: 52.37139, lng: 4.90870}, // Start at Montelbaanstoren
+        {lat: 52.37152, lng: 4.90820}, // Cross bridge
+        {lat: 52.37178, lng: 4.90731}, // Continue west on Oudeschans
+        {lat: 52.37222, lng: 4.90550}, // Becomes Sint Antoniesbreestraat
+        {lat: 52.37252, lng: 4.90350}, // Walking through shops area
+        {lat: 52.37284, lng: 4.90146}  // Arrive at Nieuwmarkt/Waag
       ]
     },
     {
+      // Step 3: Nieuwmarkt to Zeedijk/He Hua Temple
       fromStopId: 3,
       toStopId: 4,
       coordinates: [
-        {lat: 52.3725, lng: 4.9003},
-        {lat: 52.3732, lng: 4.9008},
-        {lat: 52.3739, lng: 4.9012}
+        {lat: 52.37284, lng: 4.90146}, // Start at Nieuwmarkt
+        {lat: 52.37320, lng: 4.90125}, // Exit Nieuwmarkt north
+        {lat: 52.37360, lng: 4.90082}, // Along Zeedijk
+        {lat: 52.37424, lng: 4.90030}  // Arrive at He Hua Temple
       ]
     },
     {
+      // Step 4: Zeedijk to Dam Square
       fromStopId: 4,
       toStopId: 5,
       coordinates: [
-        {lat: 52.3739, lng: 4.9012},
-        {lat: 52.3735, lng: 4.8974},
-        {lat: 52.3731, lng: 4.8936}
+        {lat: 52.37424, lng: 4.90030}, // Start at He Hua Temple
+        {lat: 52.37390, lng: 4.89950}, // Continue along Zeedijk
+        {lat: 52.37382, lng: 4.89860}, // Becomes Geldersekade
+        {lat: 52.37369, lng: 4.89732}, // Turn right onto Nieuwendijk
+        {lat: 52.37350, lng: 4.89550}, // Walking northwest
+        {lat: 52.37317, lng: 4.89361}  // Arrive at Dam Square
       ]
     },
     {
+      // Step 5: Dam Square to Begijnhof
       fromStopId: 5,
       toStopId: 6,
       coordinates: [
-        {lat: 52.3731, lng: 4.8936},
-        {lat: 52.3715, lng: 4.8914},
-        {lat: 52.3695, lng: 4.8892}
+        {lat: 52.37317, lng: 4.89361}, // Start at Dam Square
+        {lat: 52.37250, lng: 4.89280}, // Exit via Kalverstraat
+        {lat: 52.37150, lng: 4.89140}, // Continue along Kalverstraat
+        {lat: 52.37050, lng: 4.89050}, // Approaching Spui Square
+        {lat: 52.36970, lng: 4.89010}, // At Spui
+        {lat: 52.36910, lng: 4.88990}, // Enter Begijnhof passage
+        {lat: 52.36840, lng: 4.88986}  // Arrive at Begijnhof courtyard
       ]
     },
     {
+      // Step 6: Begijnhof to Nine Streets/Canal Belt
       fromStopId: 6,
       toStopId: 7,
       coordinates: [
-        {lat: 52.3695, lng: 4.8892},
-        {lat: 52.3694, lng: 4.8874},
-        {lat: 52.3693, lng: 4.8856}
+        {lat: 52.36840, lng: 4.88986}, // Start at Begijnhof
+        {lat: 52.36845, lng: 4.88920}, // Exit to Gedempte Begijnensloot
+        {lat: 52.36850, lng: 4.88850}, // West to Spui
+        {lat: 52.36860, lng: 4.88780}, // Cross Spui
+        {lat: 52.36865, lng: 4.88750}, // West to Singel Canal
+        {lat: 52.36870, lng: 4.88720}, // Turn right on Singel
+        {lat: 52.36880, lng: 4.88690}, // Walking north
+        {lat: 52.36885, lng: 4.88670}, // Turn left onto Heisteeg
+        {lat: 52.36880, lng: 4.88630}, // Through Nine Streets
+        {lat: 52.36878, lng: 4.88580}, // Crossing Herengracht
+        {lat: 52.36879, lng: 4.88540}, // Crossing Keizersgracht
+        {lat: 52.36880, lng: 4.88496}  // Arrive at Prinsengracht bridge
       ]
     },
     {
+      // Step 7: Nine Streets to Westerkerk & Anne Frank House
       fromStopId: 7,
       toStopId: 8,
       coordinates: [
-        {lat: 52.3693, lng: 4.8856},
-        {lat: 52.3719, lng: 4.8840},
-        {lat: 52.3745, lng: 4.8825}
+        {lat: 52.36880, lng: 4.88496}, // Start at Reestraat bridge
+        {lat: 52.36950, lng: 4.88460}, // Turn right along Prinsengracht
+        {lat: 52.37050, lng: 4.88430}, // Walking north
+        {lat: 52.37170, lng: 4.88400}, // Continue north
+        {lat: 52.37350, lng: 4.88370}, // Approaching Anne Frank House
+        {lat: 52.37522, lng: 4.88357}, // Arrive at Anne Frank House
+        {lat: 52.37557, lng: 4.88390}  // Final stop at Westerkerk
       ]
     }
   ];

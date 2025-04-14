@@ -98,7 +98,7 @@ const MapView: React.FC<MapViewProps> = ({
       // Create marker
       const marker = L.marker([stop.latitude, stop.longitude], { icon })
         .addTo(map)
-        .on('click', () => onStopSelect(stop.id));
+        .on('click', () => onStopSelect(stop.id, true));
 
       markersRef.current.push(marker);
     });

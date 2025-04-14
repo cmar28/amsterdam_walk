@@ -18,9 +18,24 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
   const panelRef = useRef<HTMLDivElement>(null);
   const dragHandleRef = useRef<HTMLDivElement>(null);
 
+  // Check the current view mode by checking if any element with the class "map-container" exists
+  // This is a way to determine if we're in map or list view without props
+  const isInListView = () => {
+    return document.querySelector('[class*="h-full absolute inset-0"]:not(.hidden)') !== null;
+  };
+
   // Reset the expanded state and image index when the stop changes
   useEffect(() => {
-    setIsPanelExpanded(false);
+    // If we're in list view, always expand the panel
+    if (isInListView()) {
+      setIsPanelExpanded(true);
+      if (panelRef.current) {
+        panelRef.current.style.transform = 'translateY(20%)';
+      }
+    } else {
+      setIsPanelExpanded(false);
+    }
+    
     setCurrentImageIndex(0);
     setShowTranscript(false);
   }, [currentStop?.id]);
@@ -114,7 +129,13 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
   // Set initial panel position
   useEffect(() => {
     if (panelRef.current) {
-      panelRef.current.style.transform = 'translateY(calc(100% - 130px))';
+      // Check if we're in list view on initial render
+      if (isInListView()) {
+        setIsPanelExpanded(true);
+        panelRef.current.style.transform = 'translateY(20%)';
+      } else {
+        panelRef.current.style.transform = 'translateY(calc(100% - 130px))';
+      }
     }
   }, []);
 

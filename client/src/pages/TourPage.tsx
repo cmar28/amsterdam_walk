@@ -31,12 +31,19 @@ const TourPage: React.FC = () => {
     : null;
   
   // Handle selecting a stop
-  const handleStopSelect = (stopId: number) => {
+  const handleStopSelect = (stopId: number, switchToMap: boolean = false) => {
     setCurrentStopId(stopId);
     
-    // If in list view, switch to map view when selecting a stop
-    if (viewMode === 'list') {
+    // Only switch to map view if explicitly requested
+    if (viewMode === 'list' && switchToMap) {
       setViewMode('map');
+    }
+    
+    // Expand the panel when a stop is selected in list view
+    if (viewMode === 'list') {
+      // The panel will be expanded in the StopPanel component via useEffect
+      // Force a re-render by updating the currentStopId
+      setCurrentStopId(stopId);
     }
   };
   

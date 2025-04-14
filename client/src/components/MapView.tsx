@@ -77,6 +77,9 @@ const MapView: React.FC<MapViewProps> = ({
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
+    // Prepare bounds for fitting markers
+    const bounds = L.latLngBounds([]);
+
     // Add new markers for each tour stop
     tourStops.forEach(stop => {
       // Create custom icon based on stop status (current or not)
@@ -95,13 +98,36 @@ const MapView: React.FC<MapViewProps> = ({
         iconAnchor: [16, 16]
       });
 
-      // Create marker
-      const marker = L.marker([stop.latitude, stop.longitude], { icon })
+      // Create marker with correct coordinates
+      const latLng = [stop.latitude, stop.longitude];
+      const marker = L.marker(latLng, { icon })
         .addTo(map)
         .on('click', () => onStopSelect(stop.id, true));
 
+      // Add popup with stop name for easier identification
+      marker.bindTooltip(`${stop.orderNumber}. ${stop.title}`, { 
+        direction: 'top',
+        offset: [0, -16]
+      });
+
+      // Add to marker ref for future cleanup
       markersRef.current.push(marker);
+      
+      // Extend bounds to include this marker
+      bounds.extend(latLng);
     });
+
+    // Fit the map to show all markers with some padding
+    if (bounds.isValid()) {
+      map.fitBounds(bounds, {
+        padding: [50, 50],
+        maxZoom: 15
+      });
+    }
+
+    // Log markers to verify coordinates
+    console.log('Map markers created with coordinates:', 
+      tourStops.map(stop => `${stop.orderNumber}. ${stop.title}: [${stop.latitude}, ${stop.longitude}]`));
   }, [tourStops, currentStopId, onStopSelect]);
 
   // Route paths rendering is disabled as requested

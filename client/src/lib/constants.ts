@@ -34,8 +34,8 @@ export const TOUR_INFO = {
 
 // Map settings
 export const MAP_CONFIG = {
-  initialCenter: [52.370216, 4.895168], // Amsterdam center
-  initialZoom: 15,
+  initialCenter: [52.37197, 4.89817], // Amsterdam center adjusted to show all markers
+  initialZoom: 14, // Slightly zoomed out to show more of the city
   minZoom: 13,
   maxZoom: 18,
   tileLayerUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

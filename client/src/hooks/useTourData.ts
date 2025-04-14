@@ -9,7 +9,9 @@ export function useTourData() {
     error: stopError
   } = useQuery<TourStop[]>({
     queryKey: ['/api/tour-stops'],
-    staleTime: 60 * 60 * 1000, // Cache for 1 hour
+    staleTime: 5000, // Cache for just 5 seconds to ensure fresh data
+    refetchOnMount: true, // Refetch when component mounts
+    refetchOnWindowFocus: true, // Refetch when window gets focus
   });
 
   // Fetch route paths
@@ -19,7 +21,9 @@ export function useTourData() {
     error: pathError
   } = useQuery<RoutePath[]>({
     queryKey: ['/api/route-paths'],
-    staleTime: 60 * 60 * 1000, // Cache for 1 hour
+    staleTime: 5000, // Cache for just 5 seconds
+    refetchOnMount: true, // Refetch when component mounts
+    refetchOnWindowFocus: true, // Refetch when window gets focus
   });
 
   // Sort tour stops by order number

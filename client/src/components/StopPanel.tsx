@@ -262,8 +262,8 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
         {/* Stop content */}
         <div className="mb-6">
           <h3 className="font-heading font-bold text-lg mb-3">About {currentStop.title.split(' ')[0]}</h3>
-          <div className="prose text-gray-800">
-            <p>{currentStop.description}</p>
+          <div className="prose text-gray-800 max-w-none">
+            <p className="whitespace-pre-line">{currentStop.description}</p>
           </div>
         </div>
 
@@ -302,7 +302,7 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
           <div className="mb-6">
             <h3 className="font-heading font-bold text-lg mb-3">For Kids</h3>
             <div className="bg-[#004D7F] bg-opacity-10 p-4 rounded-lg border border-[#004D7F] border-opacity-20">
-              <p className="text-sm">{currentStop.kidsContent}</p>
+              <p className="text-sm whitespace-pre-line">{currentStop.kidsContent}</p>
             </div>
           </div>
         )}

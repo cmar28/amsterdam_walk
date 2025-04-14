@@ -246,9 +246,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Tour images - using SVG files from public/images directory
+  // Tour images - serving from public/images directory
   app.get("/api/images/:imageName", (req, res) => {
     const imageName = req.params.imageName;
+    const basename = imageName.split('.')[0];
     const locationNames = [
       'nemo', 'montelbaanstoren', 'nieuwmarkt', 'waag', 
       'zeedijk', 'hehua', 'damsquare', 'royalpalace', 
@@ -256,8 +257,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       'annefrank', 'jordaan'
     ];
     
-    // Check if we have a real image for this location
-    const svgFilename = `${imageName.split('.')[0]}.svg`;
+    // First try to find a JPG file
+    const jpgFilename = `${basename}.jpg`;
+    const jpgPath = path.join(process.cwd(), 'public', 'images', jpgFilename);
+    
+    // Try to serve the JPG file if it exists
+    if (fs.existsSync(jpgPath)) {
+      try {
+        res.setHeader('Content-Type', 'image/jpeg');
+        return res.sendFile(jpgPath);
+      } catch (error) {
+        console.error(`Error serving JPG file ${jpgPath}:`, error);
+      }
+    }
+    
+    // Fallback to SVG if JPG doesn't exist
+    const svgFilename = `${basename}.svg`;
     const svgPath = path.join(process.cwd(), 'public', 'images', svgFilename);
     
     // Try to serve the SVG file if it exists
@@ -271,7 +286,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     }
     
-    // Fallback to placeholder if the SVG file doesn't exist
+    // Fallback to placeholder if neither JPG nor SVG file exists
     const locationPrefix = locationNames.find(loc => imageName.startsWith(loc)) || 'amsterdam';
     const width = 600;
     const height = 400;

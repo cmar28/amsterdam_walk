@@ -204,9 +204,11 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
               src={currentStop.images[currentImageIndex]} 
               alt={`${currentStop.title} - image ${currentImageIndex + 1}`}
               className="w-full h-full object-cover"
+              loading="eager"
               onError={(e) => {
                 // Fallback for image loading errors
-                e.currentTarget.src = "https://via.placeholder.com/600x450?text=Image+Unavailable";
+                console.error(`Failed to load image: ${currentStop.images[currentImageIndex]}`);
+                e.currentTarget.src = `/api/images/${currentStop.title.toLowerCase().replace(/\s+/g, '')}.jpg`;
               }}
             />
             

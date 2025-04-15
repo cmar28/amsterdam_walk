@@ -25,6 +25,12 @@ const TourPage: React.FC = () => {
   // Get tour data
   const { tourStops, routePaths, isLoading, error } = useTourData();
   
+  // Get current location
+  const { currentPosition, requestLocationPermission, permissionStatus } = useCurrentLocation();
+  
+  // Reference to the map component
+  const mapViewRef = useRef<any>(null);
+  
   // Find current and next stop
   const currentStop = tourStops.find(stop => stop.id === currentStopId) || null;
   const currentStopIndex = tourStops.findIndex(stop => stop.id === currentStopId);
@@ -87,6 +93,19 @@ const TourPage: React.FC = () => {
       document.body.removeChild(leafletScript);
     };
   }, []);
+  
+  // Handle location button click
+  const handleLocationRequest = () => {
+    // If we already have position, switch to map view
+    if (viewMode !== 'map') {
+      setViewMode('map');
+    }
+    
+    // Request location permission if needed
+    if (!currentPosition && permissionStatus !== 'denied') {
+      requestLocationPermission();
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen relative overflow-hidden">
@@ -214,6 +233,19 @@ const TourPage: React.FC = () => {
             </button>
           </div>
         </div>
+      )}
+      
+      {/* Floating location button (only in tour/map view) */}
+      {(activeTab === 'tour' || activeTab === 'map') && (
+        <button
+          onClick={handleLocationRequest}
+          className={`absolute left-4 bottom-20 z-30 flex items-center justify-center bg-white shadow-lg rounded-full w-14 h-14 touch-manipulation active:scale-95 transition-transform border ${
+            currentPosition ? 'border-blue-500 text-blue-500' : permissionStatus === 'denied' ? 'border-red-500 text-red-500' : 'border-gray-200 text-gray-500'
+          }`}
+          aria-label="Show my location"
+        >
+          <Navigation2 className="h-7 w-7" />
+        </button>
       )}
     </div>
   );

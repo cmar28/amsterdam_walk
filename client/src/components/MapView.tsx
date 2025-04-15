@@ -100,7 +100,11 @@ const MapView: React.FC<MapViewProps> = ({
     markersRef.current = [];
 
     // Prepare bounds for fitting markers
-    const bounds = L.latLngBounds([]);
+    // Create bounds for markers
+    const bounds = L.latLngBounds(
+      // Add initial center coordinates to have at least one point
+      [[MAP_CONFIG.initialCenter[0], MAP_CONFIG.initialCenter[1]]]
+    );
 
     // Add new markers for each tour stop
     tourStops.forEach(stop => {
@@ -140,11 +144,19 @@ const MapView: React.FC<MapViewProps> = ({
     });
 
     // Fit the map to show all markers with some padding
-    if (bounds.isValid()) {
-      map.fitBounds(bounds, {
-        padding: [50, 50],
-        maxZoom: 15
-      });
+    try {
+      if (bounds.isValid() && markersRef.current.length > 0) {
+        map.fitBounds(bounds, {
+          padding: [50, 50],
+          maxZoom: 15
+        });
+      } else {
+        // Fallback to initial center if bounds are not valid
+        map.setView(MAP_CONFIG.initialCenter, MAP_CONFIG.initialZoom);
+      }
+    } catch (error) {
+      console.warn('Could not fit bounds, using default view:', error);
+      map.setView(MAP_CONFIG.initialCenter, MAP_CONFIG.initialZoom);
     }
 
     console.log('Map markers created with coordinates:', 

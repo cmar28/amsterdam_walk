@@ -16,7 +16,7 @@ async function initializeTourData() {
       orderNumber: 1,
       latitude: 52.374175,
       longitude: 4.912442,
-      audioUrl: "/api/audio/stop1_short.mp3", // Short audio intro for Stop 1
+      audioUrl: "/api/audio/stop1_full.mp3", // Full audio narration for Stop 1
       duration: "10 minutes",
       nextStopWalkingTime: "5-7 minutes",
       walkingTip: "From NEMO, walk west along the pedestrian bridge and follow the waterfront path towards the small canal. Keep the water on your right. Montelbaanstoren – the old brick tower with a white steeple – will be straight ahead on the canal bank.",
@@ -44,7 +44,7 @@ async function initializeTourData() {
       orderNumber: 3,
       latitude: 52.3728,
       longitude: 4.9004,
-      audioUrl: "/api/audio/stop1_short.mp3", // Temporary using same audio for all stops
+      audioUrl: "/api/audio/stop3_short.mp3", // Temporary short audio for Stop 3
       duration: "45 minutes (including lunch)",
       nextStopWalkingTime: "5 minutes",
       walkingTip: "From the Waag, walk north across the square and take the street Zeedijk heading towards a large Chinese-style gateway in the distance. You'll notice Chinese shops and restaurants as we enter Chinatown.",

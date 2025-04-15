@@ -34,6 +34,8 @@ const MapView: React.FC<MapViewProps> = ({
   // State
   const [userMarker, setUserMarker] = useState<any>(null);
   const [isMapInitialized, setIsMapInitialized] = useState(false);
+  // Track if the user has manually interacted with the map
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
   
   // Get current location
   const { 
@@ -76,6 +78,17 @@ const MapView: React.FC<MapViewProps> = ({
       attribution: MAP_CONFIG.attribution
     }).addTo(map);
 
+    // Add event listeners to detect user interactions with the map
+    map.on('drag', () => {
+      setHasUserInteracted(true);
+      console.log('User dragged the map - manual interaction detected');
+    });
+    
+    map.on('zoom', () => {
+      setHasUserInteracted(true);
+      console.log('User zoomed the map - manual interaction detected');
+    });
+
     leafletMapRef.current = map;
     setIsMapInitialized(true);
 
@@ -88,6 +101,16 @@ const MapView: React.FC<MapViewProps> = ({
     };
   }, []);
 
+
+  // Reset user interaction when tour stop changes
+  useEffect(() => {
+    // When user selects a specific tour stop, we should reset the interaction state
+    // This allows the map to center on the newly selected stop
+    if (currentStopId) {
+      console.log(`Tour stop changed to #${currentStopId}, resetting user interaction state`);
+      setHasUserInteracted(false);
+    }
+  }, [currentStopId]);
 
   // Render tour stops as markers
   useEffect(() => {
@@ -144,25 +167,30 @@ const MapView: React.FC<MapViewProps> = ({
       bounds.extend(latLng);
     });
 
-    // Fit the map to show all markers with some padding
-    try {
-      if (bounds.isValid() && markersRef.current.length > 0) {
-        map.fitBounds(bounds, {
-          padding: [50, 50],
-          maxZoom: 15
-        });
-      } else {
-        // Fallback to initial center if bounds are not valid
+    // Only fit the map to bounds if user hasn't manually interacted with it
+    if (!hasUserInteracted) {
+      try {
+        if (bounds.isValid() && markersRef.current.length > 0) {
+          console.log('Auto-fitting map to tour stop bounds (no user interaction detected)');
+          map.fitBounds(bounds, {
+            padding: [50, 50],
+            maxZoom: 15
+          });
+        } else {
+          // Fallback to initial center if bounds are not valid
+          map.setView(MAP_CONFIG.initialCenter, MAP_CONFIG.initialZoom);
+        }
+      } catch (error) {
+        console.warn('Could not fit bounds, using default view:', error);
         map.setView(MAP_CONFIG.initialCenter, MAP_CONFIG.initialZoom);
       }
-    } catch (error) {
-      console.warn('Could not fit bounds, using default view:', error);
-      map.setView(MAP_CONFIG.initialCenter, MAP_CONFIG.initialZoom);
+    } else {
+      console.log('Preserving user map position (user interaction detected)');
     }
 
     console.log('Map markers created with coordinates:', 
       tourStops.map(stop => `${stop.orderNumber}. ${stop.title}: [${stop.latitude}, ${stop.longitude}]`));
-  }, [tourStops, currentStopId, onStopSelect, isMapInitialized]);
+  }, [tourStops, currentStopId, onStopSelect, isMapInitialized, hasUserInteracted]);
 
   // Route paths rendering is disabled as requested
   useEffect(() => {
@@ -240,7 +268,10 @@ const MapView: React.FC<MapViewProps> = ({
     setUserMarker(newUserMarker);
     
     // Fly to user location if this is the first time we're getting it
-    if (!userMarker) {
+    // and user hasn't manually positioned the map
+    if (!userMarker && !hasUserInteracted) {
+      console.log('Auto-flying to user location (first detection)');
+      setHasUserInteracted(true); // Mark as interacted after this automatic focus
       map.flyTo(
         [currentPosition.latitude, currentPosition.longitude],
         16,
@@ -250,17 +281,19 @@ const MapView: React.FC<MapViewProps> = ({
         }
       );
     }
-  }, [currentPosition, isMapInitialized]);
+  }, [currentPosition, isMapInitialized, hasUserInteracted, userMarker]);
 
   // Handle map controls
   const handleZoomIn = useCallback(() => {
     if (leafletMapRef.current) {
+      setHasUserInteracted(true); // Mark as user interaction
       leafletMapRef.current.zoomIn();
     }
   }, []);
 
   const handleZoomOut = useCallback(() => {
     if (leafletMapRef.current) {
+      setHasUserInteracted(true); // Mark as user interaction
       leafletMapRef.current.zoomOut();
     }
   }, []);
@@ -273,6 +306,10 @@ const MapView: React.FC<MapViewProps> = ({
     
     if (currentPosition) {
       console.log("MapView: Flying to user location:", [currentPosition.latitude, currentPosition.longitude]);
+      
+      // Mark as user interaction so view doesn't reset
+      setHasUserInteracted(true);
+      
       // Use a more direct approach to access the map
       const map = leafletMapRef.current;
       map.flyTo(

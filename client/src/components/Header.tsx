@@ -12,17 +12,17 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchToggle }) => {
       <div className="flex items-center">
         <button 
           onClick={onMenuToggle}
-          className="mr-2" 
+          className="mr-3 p-2 -m-2 rounded-full touch-manipulation active:bg-gray-100 transition-colors" 
           aria-label="Menu"
         >
           <Menu className="h-6 w-6" />
         </button>
-        <h1 className="font-heading font-bold text-lg text-[#004D7F]">Carlo's Amsterdam Tour</h1>
+        <h1 className="font-heading font-bold text-xl text-[#004D7F]">Carlo's Amsterdam Tour</h1>
       </div>
       <div className="flex items-center">
         <button 
           onClick={onSearchToggle}
-          className="ml-2" 
+          className="ml-3 p-2 -m-2 rounded-full touch-manipulation active:bg-gray-100 transition-colors" 
           aria-label="Search"
         >
           <Search className="h-6 w-6" />

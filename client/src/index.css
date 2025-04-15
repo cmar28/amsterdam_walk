@@ -9,5 +9,40 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+  }
+
+  /* Prevent iOS 100vh issues */
+  html, body, #root {
+    height: 100%;
+    @apply bg-white;
+  }
+  
+  /* Add smooth scrolling */
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Improve active state feedback */
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Fix for notched phones */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+  }
+  
+  /* Fix for font sizes */
+  @media (max-width: 360px) {
+    .text-xs {
+      font-size: 0.675rem;
+    }
+    
+    .text-sm {
+      font-size: 0.775rem;
+    }
   }
 }

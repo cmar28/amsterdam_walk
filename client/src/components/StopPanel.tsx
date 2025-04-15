@@ -248,7 +248,7 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
               <h3 className="font-heading font-semibold">Audio Transcript</h3>
               <button 
                 onClick={() => setShowTranscript(false)}
-                className="text-[#004D7F] text-sm font-medium"
+                className="text-[#004D7F] text-sm font-medium p-2 -m-2 rounded-lg touch-manipulation active:bg-blue-50 transition-colors"
               >
                 Back to Audio
               </button>
@@ -330,10 +330,10 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
               </div>
               <button 
                 onClick={onNextStop}
-                className="flex items-center justify-center bg-[#004D7F] text-white rounded-full w-10 h-10" 
+                className="flex items-center justify-center bg-[#004D7F] text-white rounded-full w-12 h-12 shadow-md touch-manipulation active:scale-95 transition-transform" 
                 aria-label="Navigate to next stop"
               >
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="h-6 w-6" />
               </button>
             </div>
           </div>

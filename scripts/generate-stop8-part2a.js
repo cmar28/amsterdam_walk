@@ -12,12 +12,12 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function generateStop8Part1Audio() {
+async function generateStop8Part2aAudio() {
   try {
-    console.log('Generating audio for Stop 8 (Part 1 - Main Description)...');
+    console.log('Generating audio for Stop 8 (Part 2a - Main Description)...');
     
-    // Main description part 1 for Stop 8 - shortened to avoid API timeout
-    const description = "We conclude our tour in the Jordaan, one of Amsterdam's most beloved neighborhoods. The Jordaan has a cozy, village-like atmosphere with narrow streets, art studios, and cafés with tables on the sidewalk. It was built in the 17th century as a working-class district for artisans and immigrants.";
+    // Main description part 2a for Stop 8 (continued)
+    const description = "The Westerkerk was completed in 1631 and Rembrandt van Rijn – the famous painter we talked about – is buried somewhere inside (in an unmarked poor man's grave, as he died in poverty). The church is still in use and if you're lucky to be here on the hour, you'll hear its beautiful carillon bells play.";
     
     // Call OpenAI's text-to-speech API
     const mp3 = await openai.audio.speech.create({
@@ -30,13 +30,13 @@ async function generateStop8Part1Audio() {
     const buffer = Buffer.from(await mp3.arrayBuffer());
     
     // Create filename
-    const fileName = `stop8_part1.mp3`;
+    const fileName = `stop8_part2a.mp3`;
     const outputPath = path.join('public/audio', fileName);
     
     // Save the audio file
     fs.writeFileSync(outputPath, buffer);
     
-    console.log(`Audio for Part 1 saved to ${outputPath}`);
+    console.log(`Audio for Part 2a saved to ${outputPath}`);
     
   } catch (error) {
     console.error('Error generating audio:', error);
@@ -44,4 +44,4 @@ async function generateStop8Part1Audio() {
 }
 
 // Run the script
-generateStop8Part1Audio();
+generateStop8Part2aAudio();

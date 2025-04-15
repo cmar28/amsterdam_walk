@@ -12,12 +12,12 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function generateStop8Part1Audio() {
+async function generateStop8Part5aAudio() {
   try {
-    console.log('Generating audio for Stop 8 (Part 1 - Main Description)...');
+    console.log('Generating audio for Stop 8 (Part 5a - Kids Content)...');
     
-    // Main description part 1 for Stop 8 - shortened to avoid API timeout
-    const description = "We conclude our tour in the Jordaan, one of Amsterdam's most beloved neighborhoods. The Jordaan has a cozy, village-like atmosphere with narrow streets, art studios, and cafés with tables on the sidewalk. It was built in the 17th century as a working-class district for artisans and immigrants.";
+    // Kids content for Stop 8 (continued)
+    const description = "The Jordaan has lots of secret gardens called 'hofjes' hidden between buildings. People play special Dutch folk music here called 'levenslied' during street festivals. It's like a treasure hunt to find all the cool spots! Anne wrote about hearing the Westerkerk bells and how they cheered her up: 'Father, Mother and Margot still can't get used to the chiming of the Westertoren clock... Not me, I liked it from the start – it sounds so reassuring, especially at night.'";
     
     // Call OpenAI's text-to-speech API
     const mp3 = await openai.audio.speech.create({
@@ -30,13 +30,13 @@ async function generateStop8Part1Audio() {
     const buffer = Buffer.from(await mp3.arrayBuffer());
     
     // Create filename
-    const fileName = `stop8_part1.mp3`;
+    const fileName = `stop8_part5a.mp3`;
     const outputPath = path.join('public/audio', fileName);
     
     // Save the audio file
     fs.writeFileSync(outputPath, buffer);
     
-    console.log(`Audio for Part 1 saved to ${outputPath}`);
+    console.log(`Audio for Part 5a saved to ${outputPath}`);
     
   } catch (error) {
     console.error('Error generating audio:', error);
@@ -44,4 +44,4 @@ async function generateStop8Part1Audio() {
 }
 
 // Run the script
-generateStop8Part1Audio();
+generateStop8Part5aAudio();

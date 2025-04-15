@@ -18,7 +18,7 @@ export function useCurrentLocation() {
   const [watchId, setWatchId] = useState<number | null>(null);
   const [permissionStatus, setPermissionStatus] = useState<LocationPermissionStatus>('unknown');
 
-  // Handle location errors - define this first to avoid the reference error
+  // Handle location errors - define this first to avoid reference errors
   const handleLocationError = useCallback((error: GeolocationPositionError) => {
     switch (error.code) {
       case error.PERMISSION_DENIED:
@@ -36,6 +36,21 @@ export function useCurrentLocation() {
         break;
     }
     setCurrentPosition(null);
+  }, []);
+
+  // Success handler for getting position
+  const handleLocationSuccess = useCallback((position: GeolocationPosition) => {
+    const { latitude, longitude, accuracy, heading, speed } = position.coords;
+    setCurrentPosition({ 
+      latitude, 
+      longitude, 
+      accuracy,
+      heading: heading !== undefined ? heading : null,
+      speed: speed !== undefined ? speed : null,
+      timestamp: Date.now() // Use current timestamp
+    });
+    setLocationError(null);
+    setPermissionStatus('granted');
   }, []);
 
   // Check permission status
@@ -130,23 +145,6 @@ export function useCurrentLocation() {
       );
     });
   }, [handleLocationError]);
-
-  // This is a duplicate definition, removed
-
-  // Success handler for getting position
-  const handleLocationSuccess = useCallback((position: GeolocationPosition) => {
-    const { latitude, longitude, accuracy, heading, speed } = position.coords;
-    setCurrentPosition({ 
-      latitude, 
-      longitude, 
-      accuracy,
-      heading: heading !== undefined ? heading : null,
-      speed: speed !== undefined ? speed : null,
-      timestamp: Date.now() // Use current timestamp
-    });
-    setLocationError(null);
-    setPermissionStatus('granted');
-  }, []);
 
   // Start watching position
   const startWatching = useCallback(() => {

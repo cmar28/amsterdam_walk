@@ -58,7 +58,7 @@ async function initializeTourData() {
       orderNumber: 4,
       latitude: 52.3739,
       longitude: 4.9003,
-      audioUrl: "/api/audio/stop4.mp3",
+      audioUrl: "/api/audio/stop4_full.mp3", // Full audio narration for Stop 4
       duration: "10 minutes",
       nextStopWalkingTime: "10 minutes",
       walkingTip: "Continue along Zeedijk which will curve and lead you out of Chinatown. Follow street signs towards 'Dam' or 'Dam Square,' heading southwest. You might pass through a short pedestrian shopping street. Keep an eye out for when the streets open up to a large plaza – that's Dam Square.",

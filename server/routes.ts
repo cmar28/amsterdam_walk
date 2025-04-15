@@ -100,7 +100,7 @@ async function initializeTourData() {
       orderNumber: 7,
       latitude: 52.3692,
       longitude: 4.8860,
-      audioUrl: "/api/audio/stop7.mp3",
+      audioUrl: "/api/audio/stop7_full.mp3", // Full audio narration for Stop 7
       duration: "30 minutes",
       nextStopWalkingTime: "10 minutes",
       walkingTip: "From the Nine Streets area, continue west until you reach the Prinsengracht canal. Follow it north until you see a tall church tower with a blue crown (the Westerkerk). Nearby, you'll find the Anne Frank House on Prinsengracht. Continue a bit further into the Jordaan district.",

@@ -166,32 +166,35 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
       className="absolute bottom-0 left-0 w-full bg-white rounded-t-2xl shadow-lg transition-transform transform"
       style={{ transitionDuration: startY ? '0s' : '0.3s' }}
     >
-      {/* Drag handle */}
+      {/* Drag handle - improved for touch */}
       <div 
         ref={dragHandleRef}
-        className="w-full flex justify-center py-2"
+        className="w-full flex justify-center py-3 touch-manipulation"
         onTouchStart={handleDragStart}
         onMouseDown={handleDragStart}
       >
-        <div className="w-10 h-1 rounded-full bg-[#E5E5E5]"></div>
+        <div className="w-12 h-1.5 rounded-full bg-[#E5E5E5]"></div>
       </div>
 
-      {/* Preview/collapsed content */}
+      {/* Preview/collapsed content - improved for touch */}
       <div 
-        className="px-4 py-2" 
+        className="px-4 py-3 touch-manipulation active:bg-gray-50 transition-colors" 
         onClick={handlePreviewClick}
       >
         <div className="flex justify-between items-center mb-2">
-          <h2 className="font-heading font-bold text-lg">{currentStop.title}</h2>
-          <div className="rounded-full bg-[#FF6B35] text-white w-8 h-8 flex items-center justify-center">
-            {currentStop.orderNumber}
+          <h2 className="font-heading font-bold text-xl">{currentStop.title}</h2>
+          <div className="rounded-full bg-[#FF6B35] text-white w-9 h-9 flex items-center justify-center shadow-sm">
+            <span className="text-lg font-bold">{currentStop.orderNumber}</span>
           </div>
         </div>
         <div className="flex justify-between text-sm">
           <div className="text-gray-600">
             {currentStop.subtitle.split(' - ')[0]}
           </div>
-          <div className="text-[#FF6B35] font-medium">Now Playing</div>
+          <div className="text-[#FF6B35] font-medium flex items-center">
+            <span className="inline-block w-2 h-2 rounded-full bg-[#FF6B35] mr-1.5 animate-pulse"></span>
+            Now Playing
+          </div>
         </div>
       </div>
 

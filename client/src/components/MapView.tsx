@@ -86,16 +86,16 @@ const MapView: React.FC<MapViewProps> = ({
       const isCurrentStop = stop.id === currentStopId;
       
       const markerHtml = `
-        <div class="bg-${isCurrentStop ? '[#FF6B35]' : '[#004D7F]'} text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md">
-          <span class="font-heading font-bold">${stop.orderNumber}</span>
+        <div class="bg-${isCurrentStop ? '[#FF6B35]' : '[#004D7F]'} text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg ${isCurrentStop ? 'border-2 border-white' : ''}">
+          <span class="font-heading font-bold text-lg">${stop.orderNumber}</span>
         </div>
       `;
       
       const icon = L.divIcon({
         html: markerHtml,
         className: 'custom-marker',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
+        iconSize: [40, 40],
+        iconAnchor: [20, 20]
       });
 
       // Create marker with correct coordinates
@@ -152,21 +152,21 @@ const MapView: React.FC<MapViewProps> = ({
       userMarker.remove();
     }
     
-    // Create custom user location marker
+    // Create custom user location marker - enhanced for mobile
     const userLocationHtml = `
       <div class="relative">
-        <div class="bg-blue-500 rounded-full w-6 h-6 border-2 border-white shadow-lg flex items-center justify-center">
-          <div class="bg-blue-300 rounded-full w-2 h-2 animate-ping absolute"></div>
+        <div class="bg-blue-500 rounded-full w-8 h-8 border-2 border-white shadow-lg flex items-center justify-center">
+          <div class="bg-blue-300 rounded-full w-3 h-3 animate-ping absolute"></div>
         </div>
-        <div class="bg-blue-500 opacity-20 rounded-full w-12 h-12 -top-3 -left-3 absolute"></div>
+        <div class="bg-blue-500 opacity-20 rounded-full w-16 h-16 -top-4 -left-4 absolute animate-pulse"></div>
       </div>
     `;
     
     const icon = L.divIcon({
       html: userLocationHtml,
       className: 'user-location-marker',
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
+      iconSize: [32, 32],
+      iconAnchor: [16, 16]
     });
     
     // Add marker for user's location
@@ -205,31 +205,31 @@ const MapView: React.FC<MapViewProps> = ({
       {/* Map container */}
       <div ref={mapRef} className="h-full w-full" />
       
-      {/* Map controls */}
-      <div className="absolute bottom-4 right-4 flex flex-col space-y-2">
+      {/* Map controls - optimized for touch */}
+      <div className="absolute bottom-6 right-4 flex flex-col space-y-3">
         <button 
           onClick={handleZoomIn}
-          className="bg-white rounded-full w-12 h-12 shadow-lg flex items-center justify-center"
+          className="bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform"
           aria-label="Zoom in"
         >
-          <Plus className="h-6 w-6 text-neutral-dark" />
+          <Plus className="h-7 w-7 text-neutral-dark" />
         </button>
         <button 
           onClick={handleZoomOut}
-          className="bg-white rounded-full w-12 h-12 shadow-lg flex items-center justify-center"
+          className="bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform"
           aria-label="Zoom out"
         >
-          <Minus className="h-6 w-6 text-neutral-dark" />
+          <Minus className="h-7 w-7 text-neutral-dark" />
         </button>
         <button 
           onClick={handleCenterOnUser}
-          className={`bg-white rounded-full w-12 h-12 shadow-lg flex items-center justify-center ${
+          className={`bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform ${
             currentPosition ? 'text-[#004D7F]' : 'text-gray-400'
           }`}
           aria-label="Center on my location"
           disabled={!currentPosition}
         >
-          <Navigation2 className="h-6 w-6" />
+          <Navigation2 className="h-7 w-7" />
         </button>
       </div>
       

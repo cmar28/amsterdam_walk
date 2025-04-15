@@ -112,13 +112,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, title, onToggleTran
         <div className="flex items-center">
           <button 
             onClick={togglePlayPause}
-            className="w-10 h-10 rounded-full bg-[#FF6B35] flex items-center justify-center shadow-sm"
+            className="w-12 h-12 rounded-full bg-[#FF6B35] flex items-center justify-center shadow-md touch-manipulation"
             aria-label={isPlaying ? "Pause" : "Play"}
           >
             {isPlaying ? (
-              <Pause className="h-5 w-5 text-white" />
+              <Pause className="h-6 w-6 text-white" />
             ) : (
-              <Play className="h-5 w-5 text-white ml-0.5" />
+              <Play className="h-6 w-6 text-white ml-0.5" />
             )}
           </button>
           <div className="ml-3">
@@ -130,26 +130,28 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, title, onToggleTran
         </div>
         <button 
           onClick={onToggleTranscript}
-          className="text-[#004D7F] font-medium text-sm flex items-center"
+          className="text-[#004D7F] font-medium text-sm flex items-center p-2 touch-manipulation rounded-lg hover:bg-blue-50 active:bg-blue-100 transition-colors"
         >
-          <File className="h-4 w-4 mr-1" />
+          <File className="h-5 w-5 mr-1" />
           Transcript
         </button>
       </div>
       
-      {/* Progress bar */}
-      <div 
-        className="relative w-full h-1.5 bg-[#E5E5E5] rounded-full cursor-pointer"
-        onClick={handleProgressClick}
-      >
+      {/* Progress bar - with larger touch area */}
+      <div className="pt-2 pb-4 px-1 -mx-1 touch-manipulation">
         <div 
-          className="absolute left-0 top-0 h-full bg-[#FF6B35] rounded-full"
-          style={{ width: `${(currentTime / duration) * 100}%` }}
-        ></div>
-        <div 
-          className="absolute top-0 transform -translate-y-1/4 w-3 h-3 bg-[#FF6B35] rounded-full shadow"
-          style={{ left: `${(currentTime / duration) * 100}%` }}
-        ></div>
+          className="relative w-full h-2 bg-[#E5E5E5] rounded-full cursor-pointer"
+          onClick={handleProgressClick}
+        >
+          <div 
+            className="absolute left-0 top-0 h-full bg-[#FF6B35] rounded-full"
+            style={{ width: `${(currentTime / duration) * 100}%` }}
+          ></div>
+          <div 
+            className="absolute top-0 transform -translate-y-1/4 w-4 h-4 bg-[#FF6B35] rounded-full shadow-md"
+            style={{ left: `${(currentTime / duration) * 100}%` }}
+          ></div>
+        </div>
       </div>
     </div>
   );

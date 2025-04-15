@@ -14,23 +14,26 @@ const openai = new OpenAI({
 
 async function generateTestAudio() {
   try {
-    // Short test transcript
-    const testTranscript = "This is a test of the Amsterdam Tour audio guide. Welcome to our walking tour of Amsterdam's cultural highlights!";
+    console.log('Generating test audio...');
     
-    console.log('Generating test audio file...');
+    // Short test text
+    const testText = "Welcome to Carlo's Amsterdam Tour. This is a test of the audio narration system.";
     
     // Call OpenAI's text-to-speech API
     const mp3 = await openai.audio.speech.create({
-      model: "tts-1",
+      model: "tts-1", // Basic TTS model
       voice: "fable", // British accent, good for storytelling
-      input: testTranscript,
+      input: testText,
     });
     
     // Convert the response to buffer
     const buffer = Buffer.from(await mp3.arrayBuffer());
     
+    // Create filename
+    const fileName = `test_audio.mp3`;
+    const outputPath = path.join('public/audio', fileName);
+    
     // Save the audio file
-    const outputPath = path.join('public/audio', 'test.mp3');
     fs.writeFileSync(outputPath, buffer);
     
     console.log(`Test audio saved to ${outputPath}`);

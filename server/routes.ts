@@ -30,7 +30,7 @@ async function initializeTourData() {
       orderNumber: 2,
       latitude: 52.3712,
       longitude: 4.9087,
-      audioUrl: "/api/audio/stop2_short.mp3", // Short audio intro for Stop 2
+      audioUrl: "/api/audio/stop2_full.mp3", // Full audio narration for Stop 2
       duration: "5 minutes",
       nextStopWalkingTime: "5-7 minutes",
       walkingTip: "Cross the bridge next to Montelbaanstoren and continue west down the street Sint Antoniesbreestraat. You'll pass through a short street with shops and then arrive at an open square with a castle-like building in the middle – that's Nieuwmarkt and the Waag.",

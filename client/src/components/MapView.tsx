@@ -305,25 +305,25 @@ const MapView: React.FC<MapViewProps> = ({
       <div ref={mapRef} className="h-full w-full" />
       
       {/* Map controls - optimized for touch */}
-      <div className="absolute bottom-6 right-4 flex flex-col space-y-3">
+      <div className="absolute bottom-28 right-4 flex flex-col space-y-3 z-[500]">
         <button 
           onClick={handleZoomIn}
-          className="bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform"
+          className="bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform border border-gray-100"
           aria-label="Zoom in"
         >
-          <Plus className="h-7 w-7 text-neutral-dark" />
+          <Plus className="h-7 w-7 text-gray-700" />
         </button>
         <button 
           onClick={handleZoomOut}
-          className="bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform"
+          className="bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform border border-gray-100"
           aria-label="Zoom out"
         >
-          <Minus className="h-7 w-7 text-neutral-dark" />
+          <Minus className="h-7 w-7 text-gray-700" />
         </button>
         <button 
           onClick={handleCenterOnUser}
-          className={`bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform ${
-            currentPosition ? 'text-blue-500' : permissionStatus === 'denied' ? 'text-red-500' : 'text-gray-500'
+          className={`bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform border border-gray-100 ${
+            currentPosition ? 'text-blue-500' : permissionStatus === 'denied' ? 'text-red-500' : 'text-gray-700'
           }`}
           aria-label="Center on my location"
         >

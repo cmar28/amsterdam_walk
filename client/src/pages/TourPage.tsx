@@ -206,57 +206,7 @@ const TourPage: React.FC = () => {
         )}
       </main>
       
-      {/* Floating location button - only shows in map view */}
-      {viewMode === 'map' && (
-        <div className="fixed right-4 bottom-24 z-30">
-          <button 
-            onClick={async () => {
-              if (currentPosition) {
-                // Now we're already in map view, so just center on the user's location
-                // Pass the request to handle it directly in the map component
-                const mapElement = document.querySelector('.leaflet-container');
-                if (mapElement && window.L && window.L.maps) {
-                  // Find the map instance
-                  const mapIds = Object.keys(window.L.maps);
-                  if (mapIds.length > 0) {
-                    const mapId = mapIds[0];
-                    const map = window.L.maps[mapId];
-                    if (map) {
-                      console.log("Flying to user location:", [currentPosition.latitude, currentPosition.longitude]);
-                      map.flyTo(
-                        [currentPosition.latitude, currentPosition.longitude],
-                        16,
-                        { animate: true, duration: 1 }
-                      );
-                    }
-                  }
-                }
-              } else {
-                // Otherwise, request location
-                try {
-                  setIsLocationLoading(true);
-                  await requestLocationPermission();
-                } catch (error) {
-                  console.error('Failed to get location permission:', error);
-                } finally {
-                  setIsLocationLoading(false);
-                }
-              }
-            }}
-            className={`bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform ${
-              currentPosition ? 'text-blue-500' : permissionStatus === 'denied' ? 'text-red-500' : 'text-gray-500'
-            }`}
-            aria-label="Show my location"
-            disabled={isLocationLoading}
-          >
-            {isLocationLoading ? (
-              <div className="w-5 h-5 border-2 border-t-blue-500 border-blue-300 rounded-full animate-spin" />
-            ) : (
-              <Navigation2 className="h-7 w-7" />
-            )}
-          </button>
-        </div>
-      )}
+      {/* Location controls moved to MapView component */}
       
       {/* Bottom navigation */}
       <BottomNavigation 

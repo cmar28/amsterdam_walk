@@ -114,7 +114,7 @@ async function initializeTourData() {
       orderNumber: 8,
       latitude: 52.3744,
       longitude: 4.8839,
-      audioUrl: "/api/audio/stop8.mp3",
+      audioUrl: "/api/audio/stop8_full.mp3", // Full audio narration for Stop 8
       duration: "End of tour - explore as long as you wish",
       nextStopWalkingTime: "",
       walkingTip: "Take your time exploring the winding streets, browsing the art galleries, or enjoying a snack at one of the many cafes. The Jordaan is perfect for leisurely wandering.",

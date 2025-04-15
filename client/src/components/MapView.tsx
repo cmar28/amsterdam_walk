@@ -42,6 +42,15 @@ const MapView: React.FC<MapViewProps> = ({
     permissionStatus,
     requestLocationPermission 
   } = useCurrentLocation();
+  
+  // Function to handle location permission request
+  const handleRequestLocation = useCallback(async () => {
+    try {
+      await requestLocationPermission();
+    } catch (error) {
+      console.error('Failed to get location permission:', error);
+    }
+  }, [requestLocationPermission]);
 
   // Initialize map on component mount
   useEffect(() => {
@@ -79,14 +88,6 @@ const MapView: React.FC<MapViewProps> = ({
     };
   }, []);
 
-  // Function to handle location permission request
-  const handleRequestLocation = useCallback(async () => {
-    try {
-      await requestLocationPermission();
-    } catch (error) {
-      console.error('Failed to get location permission:', error);
-    }
-  }, [requestLocationPermission]);
 
   // Render tour stops as markers
   useEffect(() => {

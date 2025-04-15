@@ -218,7 +218,7 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
             <div className="absolute bottom-3 right-3 flex space-x-2">
               {currentStop.images.length > 1 && (
                 <button 
-                  className="bg-white bg-opacity-80 rounded-full p-2"
+                  className="bg-white bg-opacity-80 rounded-full p-2.5 shadow-sm touch-manipulation active:bg-gray-100 active:scale-95 transition-transform"
                   onClick={nextImage}
                   aria-label="Next image"
                 >
@@ -226,8 +226,10 @@ const StopPanel: React.FC<StopPanelProps> = ({ currentStop, nextStop, onNextStop
                 </button>
               )}
               
-              <div className="bg-black bg-opacity-70 text-white text-xs rounded-full px-2 py-1">
-                {currentImageIndex + 1}/{currentStop.images.length}
+              <div className="bg-black bg-opacity-70 text-white text-xs rounded-full px-3 py-1.5 flex items-center">
+                <span className="font-medium">{currentImageIndex + 1}</span>
+                <span className="mx-1 opacity-60">/</span>
+                <span>{currentStop.images.length}</span>
               </div>
             </div>
           </div>

@@ -43,29 +43,40 @@ const ListView: React.FC<ListViewProps> = ({ tourStops, currentStopId, onStopSel
               key={stop.id}
               className={`p-4 border-l-4 ${
                 isCurrentStop ? 'border-[#FF6B35]' : 'border-gray-200'
-              }`}
+              } ${isCurrentStop ? 'bg-orange-50' : ''} active:bg-gray-50 transition-colors`}
+              onClick={() => onStopSelect(stop.id, false)}
             >
               <div className="flex justify-between">
                 <div className="font-heading font-bold text-lg">{stop.title}</div>
                 <div className={`rounded-full ${
                   isCurrentStop 
-                    ? 'bg-[#FF6B35] text-white' 
+                    ? 'bg-[#FF6B35] text-white shadow-sm' 
                     : 'bg-gray-300 text-gray-700'
-                } w-8 h-8 flex items-center justify-center flex-shrink-0`}>
-                  {stop.orderNumber}
+                } w-9 h-9 flex items-center justify-center flex-shrink-0`}>
+                  <span className="font-bold">{stop.orderNumber}</span>
                 </div>
               </div>
               
               <div className="text-sm text-gray-600 mt-1">{stop.subtitle.split(' - ')[0]}</div>
               
-              <div className="mt-2">
+              <div className="mt-2 flex justify-between items-center">
                 <button 
-                  onClick={() => onStopSelect(stop.id, false)}
-                  className="text-[#004D7F] font-medium text-sm flex items-center"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onStopSelect(stop.id, false);
+                  }}
+                  className="text-[#004D7F] font-medium text-sm flex items-center touch-manipulation p-1 -m-1 rounded active:bg-blue-50"
                 >
                   <span>View details</span>
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </button>
+                
+                {isCurrentStop && (
+                  <span className="inline-flex items-center text-xs text-[#FF6B35] font-medium">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#FF6B35] mr-1.5 animate-pulse"></span>
+                    Current Stop
+                  </span>
+                )}
               </div>
             </li>
           );
@@ -76,10 +87,10 @@ const ListView: React.FC<ListViewProps> = ({ tourStops, currentStopId, onStopSel
           <li className="p-4 text-center">
             <button 
               onClick={() => setShowAllStops(true)}
-              className="text-[#004D7F] font-medium flex items-center justify-center w-full"
+              className="text-[#004D7F] font-medium flex items-center justify-center w-full py-2 px-4 rounded-lg touch-manipulation active:bg-blue-50 transition-colors"
             >
               <span>Show all {tourStops.length} stops</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
@@ -91,10 +102,10 @@ const ListView: React.FC<ListViewProps> = ({ tourStops, currentStopId, onStopSel
           <li className="p-4 text-center">
             <button 
               onClick={() => setShowAllStops(false)}
-              className="text-[#004D7F] font-medium flex items-center justify-center w-full"
+              className="text-[#004D7F] font-medium flex items-center justify-center w-full py-2 px-4 rounded-lg touch-manipulation active:bg-blue-50 transition-colors"
             >
               <span>Show less</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
               </svg>
             </button>

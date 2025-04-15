@@ -14,17 +14,17 @@ const TourProgress: React.FC<TourProgressProps> = ({
   totalDistance
 }) => {
   return (
-    <div className="bg-white p-4 shadow-sm mb-4">
-      <div className="flex justify-between items-center mb-2">
-        <h2 className="font-heading font-bold text-neutral-dark">Tour Progress</h2>
-        <span className="text-sm text-[#FF6B35] font-medium">
+    <div className="bg-white px-4 py-5 shadow-sm mb-4 rounded-b-lg">
+      <div className="flex justify-between items-center mb-3">
+        <h2 className="font-heading font-bold text-lg text-neutral-dark">Tour Progress</h2>
+        <div className="text-[#FF6B35] font-medium px-2.5 py-1 bg-orange-50 rounded-lg text-sm">
           {currentStop} of {totalStops} stops
-        </span>
+        </div>
       </div>
       
-      <div className="w-full bg-[#E5E5E5] rounded-full h-2">
+      <div className="w-full bg-[#E5E5E5] rounded-full h-2.5 mb-1">
         <div 
-          className="bg-[#FF6B35] rounded-full h-2" 
+          className="bg-[#FF6B35] rounded-full h-2.5 transition-all duration-500 ease-out" 
           style={{ width: `${progressPercentage}%` }}
           role="progressbar" 
           aria-valuenow={progressPercentage} 
@@ -33,8 +33,13 @@ const TourProgress: React.FC<TourProgressProps> = ({
         ></div>
       </div>
       
-      <div className="mt-2 text-sm text-gray-600">
-        <span>Total distance: {totalDistance}</span>
+      <div className="flex justify-between items-center">
+        <div className="mt-2 text-sm text-gray-600">
+          <span>Total distance: {totalDistance}</span>
+        </div>
+        <div className="text-sm font-medium">
+          {Math.round(progressPercentage)}% complete
+        </div>
       </div>
     </div>
   );

@@ -33,15 +33,6 @@ const TourPage: React.FC = () => {
   
   // Get tour data
   const { tourStops, routePaths, isLoading, error } = useTourData();
-  
-  // Add Leaflet typings
-  declare global {
-    interface Window {
-      L: any & {
-        maps?: Record<string, any>;
-      };
-    }
-  }
 
   // Get current location
   const { currentPosition, requestLocationPermission, permissionStatus } = useCurrentLocation();
@@ -247,9 +238,12 @@ const TourPage: React.FC = () => {
             } else {
               // Otherwise, request location
               try {
+                setIsLocationLoading(true);
                 await requestLocationPermission();
               } catch (error) {
                 console.error('Failed to get location permission:', error);
+              } finally {
+                setIsLocationLoading(false);
               }
             }
           }}
@@ -257,8 +251,13 @@ const TourPage: React.FC = () => {
             currentPosition ? 'text-blue-500' : permissionStatus === 'denied' ? 'text-red-500' : 'text-gray-500'
           }`}
           aria-label="Show my location"
+          disabled={isLocationLoading}
         >
-          <Navigation2 className="h-7 w-7" />
+          {isLocationLoading ? (
+            <div className="w-5 h-5 border-2 border-t-blue-500 border-blue-300 rounded-full animate-spin" />
+          ) : (
+            <Navigation2 className="h-7 w-7" />
+          )}
         </button>
       </div>
       

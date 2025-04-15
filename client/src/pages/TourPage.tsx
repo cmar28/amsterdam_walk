@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import ViewToggle from '@/components/ViewToggle';
@@ -8,6 +8,8 @@ import StopPanel from '@/components/StopPanel';
 import BottomNavigation from '@/components/BottomNavigation';
 import { TourStop, RoutePath } from '@shared/schema';
 import { useTourData } from '@/hooks/useTourData';
+import { useCurrentLocation } from '@/hooks/useCurrentLocation';
+import { Navigation2 } from 'lucide-react';
 
 type NavigationTab = 'tour' | 'map' | 'gallery' | 'settings';
 type ViewMode = 'map' | 'list';

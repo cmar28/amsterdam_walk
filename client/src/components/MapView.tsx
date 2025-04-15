@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { MAP_CONFIG } from '@/lib/constants';
 import { TourStop, RoutePath } from '@shared/schema';
-import { MapPin, Plus, Minus, Navigation2 } from 'lucide-react';
+import { MapPin, Plus, Minus, Navigation2, AlertTriangle } from 'lucide-react';
 import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 
 // Declare Leaflet variables for TypeScript
@@ -24,12 +24,24 @@ const MapView: React.FC<MapViewProps> = ({
   currentStopId, 
   onStopSelect 
 }) => {
+  // Refs for map elements
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const routePathsRef = useRef<any[]>([]);
-  const { currentPosition, locationError } = useCurrentLocation();
+  const accuracyCircleRef = useRef<any>(null);
+  
+  // State
   const [userMarker, setUserMarker] = useState<any>(null);
+  const [isMapInitialized, setIsMapInitialized] = useState(false);
+  
+  // Get current location
+  const { 
+    currentPosition, 
+    locationError, 
+    permissionStatus,
+    requestLocationPermission 
+  } = useCurrentLocation();
 
   // Initialize map on component mount
   useEffect(() => {
@@ -56,6 +68,7 @@ const MapView: React.FC<MapViewProps> = ({
     }).addTo(map);
 
     leafletMapRef.current = map;
+    setIsMapInitialized(true);
 
     // Clean up on unmount
     return () => {
@@ -66,9 +79,18 @@ const MapView: React.FC<MapViewProps> = ({
     };
   }, []);
 
+  // Function to handle location permission request
+  const handleRequestLocation = useCallback(async () => {
+    try {
+      await requestLocationPermission();
+    } catch (error) {
+      console.error('Failed to get location permission:', error);
+    }
+  }, [requestLocationPermission]);
+
   // Render tour stops as markers
   useEffect(() => {
-    if (!leafletMapRef.current || !tourStops.length) return;
+    if (!isMapInitialized || !leafletMapRef.current || !tourStops.length) return;
 
     const L = window.L;
     const map = leafletMapRef.current;
@@ -125,34 +147,52 @@ const MapView: React.FC<MapViewProps> = ({
       });
     }
 
-    // Log markers to verify coordinates
     console.log('Map markers created with coordinates:', 
       tourStops.map(stop => `${stop.orderNumber}. ${stop.title}: [${stop.latitude}, ${stop.longitude}]`));
-  }, [tourStops, currentStopId, onStopSelect]);
+  }, [tourStops, currentStopId, onStopSelect, isMapInitialized]);
 
   // Route paths rendering is disabled as requested
-  // We'll only show the stop markers without the connecting routes
   useEffect(() => {
-    // Clear any existing paths whenever this component updates
-    if (leafletMapRef.current) {
-      routePathsRef.current.forEach(path => path.remove());
-      routePathsRef.current = [];
-    }
-  }, [routePaths]);
+    if (!isMapInitialized || !leafletMapRef.current) return;
+    
+    // Clear any existing paths
+    routePathsRef.current.forEach(path => path.remove());
+    routePathsRef.current = [];
+  }, [routePaths, isMapInitialized]);
 
   // Update user location marker when position changes
   useEffect(() => {
-    if (!leafletMapRef.current || !currentPosition) return;
+    if (!isMapInitialized || !leafletMapRef.current || !currentPosition) return;
 
     const L = window.L;
     const map = leafletMapRef.current;
     
-    // Remove existing user marker
+    // Remove existing user marker and accuracy circle
     if (userMarker) {
       userMarker.remove();
     }
     
-    // Create custom user location marker - enhanced for mobile
+    if (accuracyCircleRef.current) {
+      accuracyCircleRef.current.remove();
+      accuracyCircleRef.current = null;
+    }
+    
+    // Create accuracy circle first (so it appears under the marker)
+    if (currentPosition.accuracy) {
+      accuracyCircleRef.current = L.circle(
+        [currentPosition.latitude, currentPosition.longitude],
+        {
+          radius: currentPosition.accuracy,
+          fillColor: '#4299e1',
+          fillOpacity: 0.15,
+          stroke: true,
+          color: '#4299e1',
+          weight: 1
+        }
+      ).addTo(map);
+    }
+    
+    // Create custom user location marker with enhanced visibility
     const userLocationHtml = `
       <div class="relative">
         <div class="bg-blue-500 rounded-full w-8 h-8 border-2 border-white shadow-lg flex items-center justify-center">
@@ -175,30 +215,60 @@ const MapView: React.FC<MapViewProps> = ({
       { icon, zIndexOffset: 1000 }
     ).addTo(map);
     
+    // Add tooltip showing accuracy
+    if (currentPosition.accuracy) {
+      newUserMarker.bindTooltip(`You are here (±${Math.round(currentPosition.accuracy)}m)`, {
+        permanent: false,
+        direction: 'top',
+        offset: [0, -16]
+      });
+    }
+    
     setUserMarker(newUserMarker);
-  }, [currentPosition]);
+    
+    // Fly to user location if this is the first time we're getting it
+    if (!userMarker) {
+      map.flyTo(
+        [currentPosition.latitude, currentPosition.longitude],
+        16,
+        {
+          animate: true,
+          duration: 1.5
+        }
+      );
+    }
+  }, [currentPosition, isMapInitialized]);
 
   // Handle map controls
-  const handleZoomIn = () => {
+  const handleZoomIn = useCallback(() => {
     if (leafletMapRef.current) {
       leafletMapRef.current.zoomIn();
     }
-  };
+  }, []);
 
-  const handleZoomOut = () => {
+  const handleZoomOut = useCallback(() => {
     if (leafletMapRef.current) {
       leafletMapRef.current.zoomOut();
     }
-  };
+  }, []);
 
-  const handleCenterOnUser = () => {
-    if (leafletMapRef.current && currentPosition) {
-      leafletMapRef.current.setView(
+  const handleCenterOnUser = useCallback(() => {
+    if (!leafletMapRef.current) return;
+    
+    if (currentPosition) {
+      leafletMapRef.current.flyTo(
         [currentPosition.latitude, currentPosition.longitude],
-        MAP_CONFIG.initialZoom
+        16,
+        {
+          animate: true,
+          duration: 1
+        }
       );
+    } else {
+      // If no position, try to request it
+      handleRequestLocation();
     }
-  };
+  }, [currentPosition, handleRequestLocation]);
 
   return (
     <div className="h-full w-full relative">
@@ -224,20 +294,52 @@ const MapView: React.FC<MapViewProps> = ({
         <button 
           onClick={handleCenterOnUser}
           className={`bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform ${
-            currentPosition ? 'text-[#004D7F]' : 'text-gray-400'
+            currentPosition ? 'text-blue-500' : permissionStatus === 'denied' ? 'text-red-500' : 'text-gray-500'
           }`}
           aria-label="Center on my location"
-          disabled={!currentPosition}
         >
           <Navigation2 className="h-7 w-7" />
         </button>
       </div>
       
-      {/* Location error message */}
-      {locationError && (
+      {/* Location permission banner - when denied */}
+      {permissionStatus === 'denied' && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-3 rounded-lg shadow-lg text-sm text-red-500 flex items-center max-w-[90%]">
+          <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0" />
+          <div>
+            <p className="font-medium">Location access denied</p>
+            <p className="text-gray-600 text-xs mt-1">Please enable location services in your device settings to see your position on the map.</p>
+          </div>
+        </div>
+      )}
+      
+      {/* Location error message - when error occurs */}
+      {locationError && permissionStatus !== 'denied' && (
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-lg shadow-lg text-sm text-red-500 flex items-center">
           <MapPin className="h-4 w-4 mr-2" />
           {locationError}
+        </div>
+      )}
+      
+      {/* Location request banner - when prompt */}
+      {permissionStatus === 'prompt' && !currentPosition && (
+        <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 bg-white px-4 py-3 rounded-lg shadow-lg max-w-[90%]">
+          <p className="text-sm font-medium">Show your location on the map?</p>
+          <p className="text-xs text-gray-600 mb-2">See where you are in relation to tour stops</p>
+          <div className="flex justify-end space-x-2">
+            <button 
+              className="px-3 py-1.5 text-xs text-gray-600 rounded-md"
+              onClick={() => {}}
+            >
+              Not now
+            </button>
+            <button 
+              className="px-3 py-1.5 text-xs bg-blue-500 text-white rounded-md font-medium"
+              onClick={handleRequestLocation}
+            >
+              Allow location
+            </button>
+          </div>
         </div>
       )}
     </div>

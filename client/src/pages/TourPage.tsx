@@ -11,6 +11,15 @@ import { useTourData } from '@/hooks/useTourData';
 import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 import { Navigation2 } from 'lucide-react';
 
+// Add Leaflet typings
+declare global {
+  interface Window {
+    L: any & {
+      maps?: Record<string, any>;
+    };
+  }
+}
+
 type NavigationTab = 'tour' | 'map' | 'gallery' | 'settings';
 type ViewMode = 'map' | 'list';
 
@@ -25,8 +34,20 @@ const TourPage: React.FC = () => {
   // Get tour data
   const { tourStops, routePaths, isLoading, error } = useTourData();
   
+  // Add Leaflet typings
+  declare global {
+    interface Window {
+      L: any & {
+        maps?: Record<string, any>;
+      };
+    }
+  }
+
   // Get current location
   const { currentPosition, requestLocationPermission, permissionStatus } = useCurrentLocation();
+  
+  // State for location request loading
+  const [isLocationLoading, setIsLocationLoading] = useState(false);
   
   // Reference to the map component
   const mapViewRef = useRef<any>(null);
@@ -194,6 +215,53 @@ const TourPage: React.FC = () => {
         )}
       </main>
       
+      {/* Floating location button - shows in both views */}
+      <div className="fixed right-4 bottom-24 z-30">
+        <button 
+          onClick={async () => {
+            // If we have a location, switch to map view and center on it
+            if (currentPosition) {
+              setViewMode('map');
+              // Give time for the map view to be rendered if it wasn't already
+              setTimeout(() => {
+                // Center the map on the user's location
+                const mapElement = document.querySelector('.leaflet-container');
+                if (mapElement) {
+                  // Use a safer approach to access Leaflet internals
+                  if (window.L && window.L.maps) {
+                    // Find the map instance
+                    const mapId = Object.keys(window.L.maps)[0];
+                    if (mapId) {
+                      const map = window.L.maps[mapId];
+                      if (map) {
+                        map.flyTo(
+                          [currentPosition.latitude, currentPosition.longitude],
+                          16,
+                          { animate: true, duration: 1 }
+                        );
+                      }
+                    }
+                  }
+                }
+              }, 100);
+            } else {
+              // Otherwise, request location
+              try {
+                await requestLocationPermission();
+              } catch (error) {
+                console.error('Failed to get location permission:', error);
+              }
+            }
+          }}
+          className={`bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform ${
+            currentPosition ? 'text-blue-500' : permissionStatus === 'denied' ? 'text-red-500' : 'text-gray-500'
+          }`}
+          aria-label="Show my location"
+        >
+          <Navigation2 className="h-7 w-7" />
+        </button>
+      </div>
+      
       {/* Bottom navigation */}
       <BottomNavigation 
         activeTab={activeTab}
@@ -235,18 +303,7 @@ const TourPage: React.FC = () => {
         </div>
       )}
       
-      {/* Floating location button (only in tour/map view) */}
-      {(activeTab === 'tour' || activeTab === 'map') && (
-        <button
-          onClick={handleLocationRequest}
-          className={`absolute left-4 bottom-20 z-30 flex items-center justify-center bg-white shadow-lg rounded-full w-14 h-14 touch-manipulation active:scale-95 transition-transform border ${
-            currentPosition ? 'border-blue-500 text-blue-500' : permissionStatus === 'denied' ? 'border-red-500 text-red-500' : 'border-gray-200 text-gray-500'
-          }`}
-          aria-label="Show my location"
-        >
-          <Navigation2 className="h-7 w-7" />
-        </button>
-      )}
+
     </div>
   );
 };

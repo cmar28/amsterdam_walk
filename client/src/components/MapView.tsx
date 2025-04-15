@@ -334,15 +334,20 @@ const MapView: React.FC<MapViewProps> = ({
         </div>
       )}
       
-      {/* Location request banner - when prompt */}
-      {permissionStatus === 'prompt' && !currentPosition && (
+      {/* Location request banner - when prompt and not dismissed */}
+      {permissionStatus === 'prompt' && !currentPosition && !sessionStorage.getItem('locationPromptDismissed') && (
         <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 bg-white px-4 py-3 rounded-lg shadow-lg max-w-[90%]">
           <p className="text-sm font-medium">Show your location on the map?</p>
           <p className="text-xs text-gray-600 mb-2">See where you are in relation to tour stops</p>
           <div className="flex justify-end space-x-2">
             <button 
               className="px-3 py-1.5 text-xs text-gray-600 rounded-md"
-              onClick={() => {}}
+              onClick={() => {
+                // Set a session flag to avoid showing this prompt again
+                sessionStorage.setItem('locationPromptDismissed', 'true');
+                // Force component to update
+                setIsMapInitialized(prev => prev);
+              }}
             >
               Not now
             </button>

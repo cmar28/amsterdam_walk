@@ -18,6 +18,26 @@ export function useCurrentLocation() {
   const [watchId, setWatchId] = useState<number | null>(null);
   const [permissionStatus, setPermissionStatus] = useState<LocationPermissionStatus>('unknown');
 
+  // Handle location errors - define this first to avoid the reference error
+  const handleLocationError = useCallback((error: GeolocationPositionError) => {
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        setLocationError('Please allow location access to track your position on the map');
+        setPermissionStatus('denied');
+        break;
+      case error.POSITION_UNAVAILABLE:
+        setLocationError('Cannot determine your location. Please check your device settings.');
+        break;
+      case error.TIMEOUT:
+        setLocationError('Location request timed out. Please try again.');
+        break;
+      default:
+        setLocationError('An unknown location error occurred');
+        break;
+    }
+    setCurrentPosition(null);
+  }, []);
+
   // Check permission status
   const checkPermission = useCallback(async () => {
     if (navigator.permissions && navigator.permissions.query) {
@@ -43,8 +63,12 @@ export function useCurrentLocation() {
     }
 
     return new Promise<Position>((resolve, reject) => {
+      console.log("Requesting location permission...");
+      
+      // First try with high accuracy (GPS)
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log("Got position with high accuracy:", position.coords);
           const { latitude, longitude, accuracy, heading, speed } = position.coords;
           const newPosition = { 
             latitude, 
@@ -56,11 +80,47 @@ export function useCurrentLocation() {
           };
           setCurrentPosition(newPosition);
           setLocationError(null);
+          setPermissionStatus('granted');
           resolve(newPosition);
         },
         (error) => {
-          handleLocationError(error);
-          reject(error);
+          console.warn("High accuracy position failed:", error);
+          
+          // If high accuracy fails, try with lower accuracy
+          if (error.code === error.TIMEOUT || error.code === error.POSITION_UNAVAILABLE) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                console.log("Got position with low accuracy:", position.coords);
+                const { latitude, longitude, accuracy, heading, speed } = position.coords;
+                const newPosition = { 
+                  latitude, 
+                  longitude, 
+                  accuracy,
+                  heading: heading !== undefined ? heading : null,
+                  speed: speed !== undefined ? speed : null,
+                  timestamp: Date.now()
+                };
+                setCurrentPosition(newPosition);
+                setLocationError(null);
+                setPermissionStatus('granted');
+                resolve(newPosition);
+              },
+              (fallbackError) => {
+                console.error("Both high and low accuracy position failed:", fallbackError);
+                handleLocationError(fallbackError);
+                reject(fallbackError);
+              },
+              { 
+                enableHighAccuracy: false,
+                timeout: 15000,
+                maximumAge: 60000 // Accept positions up to 1 minute old
+              }
+            );
+          } else {
+            // If it's a permission error or other, just handle it
+            handleLocationError(error);
+            reject(error);
+          }
         },
         { 
           enableHighAccuracy: true,
@@ -69,27 +129,9 @@ export function useCurrentLocation() {
         }
       );
     });
-  }, []);
+  }, [handleLocationError]);
 
-  // Handle location errors
-  const handleLocationError = useCallback((error: GeolocationPositionError) => {
-    switch (error.code) {
-      case error.PERMISSION_DENIED:
-        setLocationError('Please allow location access to track your position on the map');
-        setPermissionStatus('denied');
-        break;
-      case error.POSITION_UNAVAILABLE:
-        setLocationError('Cannot determine your location. Please check your device settings.');
-        break;
-      case error.TIMEOUT:
-        setLocationError('Location request timed out. Please try again.');
-        break;
-      default:
-        setLocationError('An unknown location error occurred');
-        break;
-    }
-    setCurrentPosition(null);
-  }, []);
+  // This is a duplicate definition, removed
 
   // Success handler for getting position
   const handleLocationSuccess = useCallback((position: GeolocationPosition) => {

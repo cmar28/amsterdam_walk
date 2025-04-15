@@ -266,10 +266,16 @@ const MapView: React.FC<MapViewProps> = ({
   }, []);
 
   const handleCenterOnUser = useCallback(() => {
-    if (!leafletMapRef.current) return;
+    if (!leafletMapRef.current) {
+      console.warn("Map reference not available");
+      return;
+    }
     
     if (currentPosition) {
-      leafletMapRef.current.flyTo(
+      console.log("MapView: Flying to user location:", [currentPosition.latitude, currentPosition.longitude]);
+      // Use a more direct approach to access the map
+      const map = leafletMapRef.current;
+      map.flyTo(
         [currentPosition.latitude, currentPosition.longitude],
         16,
         {
@@ -277,8 +283,18 @@ const MapView: React.FC<MapViewProps> = ({
           duration: 1
         }
       );
+      
+      // Make the user marker pulse to highlight it
+      const userMarkerElement = document.querySelector('.user-location-marker');
+      if (userMarkerElement) {
+        userMarkerElement.classList.add('highlight-pulse');
+        setTimeout(() => {
+          userMarkerElement.classList.remove('highlight-pulse');
+        }, 2000);
+      }
     } else {
       // If no position, try to request it
+      console.log("MapView: Requesting location permission");
       handleRequestLocation();
     }
   }, [currentPosition, handleRequestLocation]);

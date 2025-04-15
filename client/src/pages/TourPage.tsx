@@ -206,60 +206,57 @@ const TourPage: React.FC = () => {
         )}
       </main>
       
-      {/* Floating location button - shows in both views */}
-      <div className="fixed right-4 bottom-24 z-30">
-        <button 
-          onClick={async () => {
-            // If we have a location, switch to map view and center on it
-            if (currentPosition) {
-              setViewMode('map');
-              // Give time for the map view to be rendered if it wasn't already
-              setTimeout(() => {
-                // Center the map on the user's location
+      {/* Floating location button - only shows in map view */}
+      {viewMode === 'map' && (
+        <div className="fixed right-4 bottom-24 z-30">
+          <button 
+            onClick={async () => {
+              if (currentPosition) {
+                // Now we're already in map view, so just center on the user's location
+                // Pass the request to handle it directly in the map component
                 const mapElement = document.querySelector('.leaflet-container');
-                if (mapElement) {
-                  // Use a safer approach to access Leaflet internals
-                  if (window.L && window.L.maps) {
-                    // Find the map instance
-                    const mapId = Object.keys(window.L.maps)[0];
-                    if (mapId) {
-                      const map = window.L.maps[mapId];
-                      if (map) {
-                        map.flyTo(
-                          [currentPosition.latitude, currentPosition.longitude],
-                          16,
-                          { animate: true, duration: 1 }
-                        );
-                      }
+                if (mapElement && window.L && window.L.maps) {
+                  // Find the map instance
+                  const mapIds = Object.keys(window.L.maps);
+                  if (mapIds.length > 0) {
+                    const mapId = mapIds[0];
+                    const map = window.L.maps[mapId];
+                    if (map) {
+                      console.log("Flying to user location:", [currentPosition.latitude, currentPosition.longitude]);
+                      map.flyTo(
+                        [currentPosition.latitude, currentPosition.longitude],
+                        16,
+                        { animate: true, duration: 1 }
+                      );
                     }
                   }
                 }
-              }, 100);
-            } else {
-              // Otherwise, request location
-              try {
-                setIsLocationLoading(true);
-                await requestLocationPermission();
-              } catch (error) {
-                console.error('Failed to get location permission:', error);
-              } finally {
-                setIsLocationLoading(false);
+              } else {
+                // Otherwise, request location
+                try {
+                  setIsLocationLoading(true);
+                  await requestLocationPermission();
+                } catch (error) {
+                  console.error('Failed to get location permission:', error);
+                } finally {
+                  setIsLocationLoading(false);
+                }
               }
-            }
-          }}
-          className={`bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform ${
-            currentPosition ? 'text-blue-500' : permissionStatus === 'denied' ? 'text-red-500' : 'text-gray-500'
-          }`}
-          aria-label="Show my location"
-          disabled={isLocationLoading}
-        >
-          {isLocationLoading ? (
-            <div className="w-5 h-5 border-2 border-t-blue-500 border-blue-300 rounded-full animate-spin" />
-          ) : (
-            <Navigation2 className="h-7 w-7" />
-          )}
-        </button>
-      </div>
+            }}
+            className={`bg-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center touch-manipulation active:bg-gray-100 active:scale-95 transition-transform ${
+              currentPosition ? 'text-blue-500' : permissionStatus === 'denied' ? 'text-red-500' : 'text-gray-500'
+            }`}
+            aria-label="Show my location"
+            disabled={isLocationLoading}
+          >
+            {isLocationLoading ? (
+              <div className="w-5 h-5 border-2 border-t-blue-500 border-blue-300 rounded-full animate-spin" />
+            ) : (
+              <Navigation2 className="h-7 w-7" />
+            )}
+          </button>
+        </div>
+      )}
       
       {/* Bottom navigation */}
       <BottomNavigation 

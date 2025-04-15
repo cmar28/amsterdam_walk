@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Amsterdam Walking Tour App is a cutting-edge mobile walking tour application that reimagines urban exploration through technology. This interactive application focuses on Amsterdam's rich cultural landscape, guiding users through a carefully curated tour from the NEMO Science Museum to the Jordaan District.
+The Amsterdam Walking Tour App is a mobile walking tour application that reimagines urban exploration through technology. This interactive application focuses on Amsterdam's rich cultural landscape, guiding users through a carefully curated tour from the NEMO Science Museum to the Jordaan District.
 
 The application was built using modern web technologies, with a focus on providing an immersive and interactive experience for tourists and locals alike. It combines geolocation services, interactive maps, and AI-powered audio narration to create a comprehensive guided tour experience.
 
@@ -214,15 +214,3 @@ npm run start
 ├── package.json              # Project dependencies
 └── tsconfig.json             # TypeScript configuration
 ```
-
-## Deployment
-
-The application can be deployed to any hosting service that supports Node.js applications. For Replit-specific deployment:
-
-1. Fork the project on Replit
-2. The application is configured for Replit Deployments
-3. Click "Deploy" in the Replit interface
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.

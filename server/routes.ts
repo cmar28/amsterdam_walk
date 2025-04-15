@@ -86,7 +86,7 @@ async function initializeTourData() {
       orderNumber: 6,
       latitude: 52.3685,
       longitude: 4.8899,
-      audioUrl: "/api/audio/stop6.mp3",
+      audioUrl: "/api/audio/stop6_full.mp3", // Full audio narration for Stop 6
       duration: "15 minutes",
       nextStopWalkingTime: "15 minutes",
       walkingTip: "Exit Begijnhof the same way you entered and head west. Cross the Singel canal and continue straight until you reach the next set of canals – Herengracht, Keizersgracht, and Prinsengracht. You're now entering the Canal Belt and the Nine Streets area.",

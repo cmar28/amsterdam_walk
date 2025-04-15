@@ -16,7 +16,7 @@ async function initializeTourData() {
       orderNumber: 1,
       latitude: 52.374175,
       longitude: 4.912442,
-      audioUrl: "/api/audio/stop1_short.mp3", // Short audio sample for testing
+      audioUrl: "/api/audio/stop1_short.mp3", // Short audio intro for Stop 1
       duration: "10 minutes",
       nextStopWalkingTime: "5-7 minutes",
       walkingTip: "From NEMO, walk west along the pedestrian bridge and follow the waterfront path towards the small canal. Keep the water on your right. Montelbaanstoren – the old brick tower with a white steeple – will be straight ahead on the canal bank.",
@@ -30,7 +30,7 @@ async function initializeTourData() {
       orderNumber: 2,
       latitude: 52.3712,
       longitude: 4.9087,
-      audioUrl: "/api/audio/stop1_short.mp3", // Temporary using same audio for all stops
+      audioUrl: "/api/audio/stop2_short.mp3", // Short audio intro for Stop 2
       duration: "5 minutes",
       nextStopWalkingTime: "5-7 minutes",
       walkingTip: "Cross the bridge next to Montelbaanstoren and continue west down the street Sint Antoniesbreestraat. You'll pass through a short street with shops and then arrive at an open square with a castle-like building in the middle – that's Nieuwmarkt and the Waag.",

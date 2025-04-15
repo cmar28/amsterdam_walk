@@ -72,7 +72,7 @@ async function initializeTourData() {
       orderNumber: 5,
       latitude: 52.373,
       longitude: 4.893,
-      audioUrl: "/api/audio/stop5.mp3",
+      audioUrl: "/api/audio/stop5_full.mp3", // Full audio narration for Stop 5
       duration: "15 minutes",
       nextStopWalkingTime: "10 minutes",
       walkingTip: "From Dam Square, head southwest along Kalverstraat, one of Amsterdam's main shopping streets. Continue until you see a small arched gateway on your right – that's the entrance to Begijnhof. It's easy to miss, so watch for a simple arch with 'Begijnhof' written above it.",

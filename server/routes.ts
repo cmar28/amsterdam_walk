@@ -44,7 +44,7 @@ async function initializeTourData() {
       orderNumber: 3,
       latitude: 52.3728,
       longitude: 4.9004,
-      audioUrl: "/api/audio/stop3_full.mp3", // Full audio narration for Stop 3
+      audioUrl: "/api/audio/stop3_full_updated.mp3", // Full audio narration for Stop 3 (with complete kids content)
       duration: "45 minutes (including lunch)",
       nextStopWalkingTime: "5 minutes",
       walkingTip: "From the Waag, walk north across the square and take the street Zeedijk heading towards a large Chinese-style gateway in the distance. You'll notice Chinese shops and restaurants as we enter Chinatown.",

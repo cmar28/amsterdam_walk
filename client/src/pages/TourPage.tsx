@@ -5,6 +5,7 @@ import ViewToggle from '@/components/ViewToggle';
 import MapView from '@/components/MapView';
 import ListView from '@/components/ListView';
 import StopPanel from '@/components/StopPanel';
+import SettingsPanel from '@/components/SettingsPanel';
 import BottomNavigation from '@/components/BottomNavigation';
 import { TourStop, RoutePath } from '@shared/schema';
 import { useTourData } from '@/hooks/useTourData';
@@ -32,7 +33,7 @@ const TourPage: React.FC = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   
   // Get tour data
-  const { tourStops, routePaths, isLoading, error } = useTourData();
+  const { tourStops, routePaths, isLoading, error, isOnline, usingOfflineData } = useTourData();
 
   // Get current location
   const { currentPosition, requestLocationPermission, permissionStatus } = useCurrentLocation();
@@ -135,74 +136,82 @@ const TourPage: React.FC = () => {
       
       {/* Main content */}
       <main className="flex-1 overflow-hidden relative">
-        {/* Map view */}
-        <div className={viewMode === 'map' ? 'h-full' : 'hidden'}>
-          {isLoading ? (
-            <div className="flex h-full items-center justify-center">
-              <div className="text-center">
-                <div className="w-12 h-12 border-4 border-t-[#FF6B35] border-[#E5E5E5] rounded-full animate-spin mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading tour map...</p>
-              </div>
+        {activeTab === 'settings' ? (
+          <div className="h-full overflow-y-auto bg-gray-50">
+            <SettingsPanel />
+          </div>
+        ) : (
+          <>
+            {/* Map view */}
+            <div className={viewMode === 'map' ? 'h-full' : 'hidden'}>
+              {isLoading ? (
+                <div className="flex h-full items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-12 h-12 border-4 border-t-[#FF6B35] border-[#E5E5E5] rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading tour map...</p>
+                  </div>
+                </div>
+              ) : error ? (
+                <div className="flex h-full items-center justify-center p-4">
+                  <div className="text-center text-red-500">
+                    <p>Error loading tour data. Please try again.</p>
+                    <button 
+                      className="mt-4 px-4 py-2 bg-[#FF6B35] text-white rounded-lg"
+                      onClick={() => window.location.reload()}
+                    >
+                      Reload
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <MapView 
+                  tourStops={tourStops} 
+                  routePaths={routePaths}
+                  currentStopId={currentStopId}
+                  onStopSelect={handleStopSelect}
+                />
+              )}
             </div>
-          ) : error ? (
-            <div className="flex h-full items-center justify-center p-4">
-              <div className="text-center text-red-500">
-                <p>Error loading tour data. Please try again.</p>
-                <button 
-                  className="mt-4 px-4 py-2 bg-[#FF6B35] text-white rounded-lg"
-                  onClick={() => window.location.reload()}
-                >
-                  Reload
-                </button>
-              </div>
+            
+            {/* List view */}
+            <div className={viewMode === 'list' ? 'h-full absolute inset-0' : 'hidden'}>
+              {isLoading ? (
+                <div className="flex h-full items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-12 h-12 border-4 border-t-[#FF6B35] border-[#E5E5E5] rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading tour stops...</p>
+                  </div>
+                </div>
+              ) : error ? (
+                <div className="flex h-full items-center justify-center p-4">
+                  <div className="text-center text-red-500">
+                    <p>Error loading tour data. Please try again.</p>
+                    <button 
+                      className="mt-4 px-4 py-2 bg-[#FF6B35] text-white rounded-lg"
+                      onClick={() => window.location.reload()}
+                    >
+                      Reload
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <ListView 
+                  tourStops={tourStops}
+                  currentStopId={currentStopId}
+                  onStopSelect={handleStopSelect}
+                />
+              )}
             </div>
-          ) : (
-            <MapView 
-              tourStops={tourStops} 
-              routePaths={routePaths}
-              currentStopId={currentStopId}
-              onStopSelect={handleStopSelect}
-            />
-          )}
-        </div>
-        
-        {/* List view */}
-        <div className={viewMode === 'list' ? 'h-full absolute inset-0' : 'hidden'}>
-          {isLoading ? (
-            <div className="flex h-full items-center justify-center">
-              <div className="text-center">
-                <div className="w-12 h-12 border-4 border-t-[#FF6B35] border-[#E5E5E5] rounded-full animate-spin mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading tour stops...</p>
-              </div>
-            </div>
-          ) : error ? (
-            <div className="flex h-full items-center justify-center p-4">
-              <div className="text-center text-red-500">
-                <p>Error loading tour data. Please try again.</p>
-                <button 
-                  className="mt-4 px-4 py-2 bg-[#FF6B35] text-white rounded-lg"
-                  onClick={() => window.location.reload()}
-                >
-                  Reload
-                </button>
-              </div>
-            </div>
-          ) : (
-            <ListView 
-              tourStops={tourStops}
-              currentStopId={currentStopId}
-              onStopSelect={handleStopSelect}
-            />
-          )}
-        </div>
-        
-        {/* Stop details panel */}
-        {!isLoading && !error && (
-          <StopPanel 
-            currentStop={currentStop}
-            nextStop={nextStop}
-            onNextStop={handleNextStop}
-          />
+            
+            {/* Stop details panel */}
+            {!isLoading && !error && (
+              <StopPanel 
+                currentStop={currentStop}
+                nextStop={nextStop}
+                onNextStop={handleNextStop}
+              />
+            )}
+          </>
         )}
       </main>
       

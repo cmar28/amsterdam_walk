@@ -19,4 +19,17 @@ howlerScript.crossOrigin = "anonymous";
 howlerScript.referrerPolicy = "no-referrer";
 document.head.appendChild(howlerScript);
 
+// Register service worker for offline functionality
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then((registration) => {
+        console.log('Service Worker registration successful with scope: ', registration.scope);
+      })
+      .catch((err) => {
+        console.log('Service Worker registration failed: ', err);
+      });
+  });
+}
+
 createRoot(document.getElementById("root")!).render(<App />);

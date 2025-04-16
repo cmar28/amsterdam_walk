@@ -1088,7 +1088,727 @@ Set up the application for deployment by ensuring:
 - Environment variables are properly managed
 - Paths and URLs are correctly referenced
 
-## Step 14: Testing and Refinement
+## Step 14: Implement Offline Functionality
+
+The Amsterdam Tour app should work without an internet connection, which is crucial for international travelers who want to minimize data usage while abroad.
+
+1. **Create a Service Worker**:
+   Create `public/service-worker.js` to intercept network requests and serve cached content:
+
+   ```javascript
+   // Cache version - increment when making significant changes
+   const CACHE_NAME = 'amsterdam-tour-cache-v1';
+
+   // Resources to cache on install
+   const STATIC_ASSETS = [
+     '/',
+     '/index.html',
+     '/manifest.json',
+     '/favicon.ico',
+   ];
+
+   // Install event - cache static assets
+   self.addEventListener('install', (event) => {
+     event.waitUntil(
+       caches.open(CACHE_NAME)
+         .then((cache) => {
+           return cache.addAll(STATIC_ASSETS);
+         })
+         .then(() => {
+           return self.skipWaiting();
+         })
+     );
+   });
+
+   // Activate event - clean up old caches
+   self.addEventListener('activate', (event) => {
+     event.waitUntil(
+       caches.keys().then((cacheNames) => {
+         return Promise.all(
+           cacheNames.filter((cacheName) => {
+             return cacheName !== CACHE_NAME;
+           }).map((cacheName) => {
+             return caches.delete(cacheName);
+           })
+         );
+       }).then(() => {
+         return self.clients.claim();
+       })
+     );
+   });
+
+   // Fetch event - respond with cached content when available
+   self.addEventListener('fetch', (event) => {
+     // Skip non-GET requests
+     if (event.request.method !== 'GET') return;
+     
+     // Handle API requests and static assets differently
+     const url = new URL(event.request.url);
+     const isApiRequest = url.pathname.startsWith('/api/');
+     
+     if (isApiRequest) {
+       // For API requests: Try network first, fallback to cache
+       event.respondWith(
+         (async () => {
+           try {
+             // Try to get from network
+             const networkResponse = await fetch(event.request);
+             
+             // Cache successful responses
+             if (networkResponse.ok) {
+               const cache = await caches.open(CACHE_NAME);
+               // Clone the response before using it to cache
+               try {
+                 await cache.put(event.request, networkResponse.clone());
+               } catch (cacheError) {
+                 console.error('Failed to cache response:', cacheError);
+               }
+             }
+             
+             return networkResponse;
+           } catch (networkError) {
+             console.log('Network request failed, trying cache:', networkError);
+             
+             // If network fails, try to serve from cache
+             const cachedResponse = await caches.match(event.request);
+             if (cachedResponse) {
+               return cachedResponse;
+             }
+             
+             // If no cache match, return an offline error response
+             return new Response(JSON.stringify({ 
+               error: 'Cannot connect to server, and no offline data available' 
+             }), {
+               headers: { 'Content-Type': 'application/json' },
+               status: 503
+             });
+           }
+         })()
+       );
+     } else {
+       // For static assets and pages: Cache first, then network
+       event.respondWith(
+         (async () => {
+           // Try cache first
+           const cachedResponse = await caches.match(event.request);
+           if (cachedResponse) {
+             return cachedResponse;
+           }
+           
+           // If not in cache, try network
+           try {
+             const networkResponse = await fetch(event.request);
+             
+             // Cache successful responses for static assets
+             if (networkResponse.ok) {
+               const cache = await caches.open(CACHE_NAME);
+               try {
+                 // Clone response for caching
+                 await cache.put(event.request, networkResponse.clone());
+               } catch (cacheError) {
+                 console.error('Failed to cache response:', cacheError);
+               }
+             }
+             
+             return networkResponse;
+           } catch (networkError) {
+             console.error('Network request failed for static asset:', networkError);
+             // Return a default offline page or error
+             return new Response('Offline - Resource not available', { 
+               status: 503,
+               headers: { 'Content-Type': 'text/plain' }
+             });
+           }
+         })()
+       );
+     }
+   });
+
+   // Listen for messages from the main thread
+   self.addEventListener('message', (event) => {
+     if (event.data && event.data.type === 'CLEAR_CACHE') {
+       caches.delete(CACHE_NAME).then(() => {
+         self.clients.matchAll().then((clients) => {
+           clients.forEach((client) => {
+             client.postMessage({ type: 'CACHE_CLEARED' });
+           });
+         });
+       });
+     }
+   });
+   ```
+
+2. **Register the Service Worker**:
+   Update `client/src/main.tsx` to register the service worker:
+
+   ```typescript
+   // Register service worker for offline functionality
+   if ('serviceWorker' in navigator) {
+     window.addEventListener('load', async () => {
+       try {
+         // Check if service worker is already registered
+         const registrations = await navigator.serviceWorker.getRegistrations();
+         
+         // Unregister any existing service workers to avoid conflicts
+         for (let registration of registrations) {
+           await registration.unregister();
+         }
+         
+         // Register our new service worker
+         const registration = await navigator.serviceWorker.register('/service-worker.js');
+         console.log('Service Worker registration successful with scope: ', registration.scope);
+       } catch (err) {
+         console.log('Service Worker registration failed: ', err);
+         // Service worker failed, but app can still function without offline support
+       }
+     });
+   }
+   ```
+
+3. **Create the Cache Service**:
+   Create `client/src/lib/cacheService.ts` to manage the caching of tour data:
+
+   ```typescript
+   import { TourStop, RoutePath } from '../../shared/schema';
+
+   const CACHE_NAME = 'amsterdam-tour-cache-v1';
+
+   // localStorage keys for offline data
+   const STORAGE_KEYS = {
+     TOUR_STOPS: 'offline:tour-stops',
+     ROUTE_PATHS: 'offline:route-paths',
+     AUDIO_FILES: 'offline:audio-files',
+     IMAGES: 'offline:images',
+     CACHE_TIMESTAMP: 'offline:cache-timestamp',
+   };
+
+   // Types for the progress tracking
+   export interface DownloadProgress {
+     total: number;
+     downloaded: number;
+     completed: boolean;
+     error?: string;
+   }
+
+   export type ProgressListener = (progress: DownloadProgress) => void;
+
+   /**
+    * Cache Service - Manages offline data caching and retrieval
+    */
+   class CacheService {
+     private cacheName = CACHE_NAME;
+     private progressListeners: ProgressListener[] = [];
+     private currentProgress: DownloadProgress = {
+       total: 0,
+       downloaded: 0,
+       completed: false,
+     };
+
+     /**
+      * Check if browser supports caching
+      */
+     isSupported(): boolean {
+       return 'caches' in window && 'serviceWorker' in navigator;
+     }
+
+     /**
+      * Get or create the cache
+      */
+     private async getCache(): Promise<Cache | null> {
+       if (!this.isSupported()) return null;
+       return await caches.open(this.cacheName);
+     }
+
+     /**
+      * Add a download progress listener
+      */
+     addProgressListener(listener: ProgressListener): () => void {
+       this.progressListeners.push(listener);
+       listener(this.currentProgress);
+       return () => {
+         this.progressListeners = this.progressListeners.filter(l => l !== listener);
+       };
+     }
+
+     /**
+      * Update download progress
+      */
+     private updateProgress(updates: Partial<DownloadProgress>): void {
+       this.currentProgress = { ...this.currentProgress, ...updates };
+       this.progressListeners.forEach(listener => {
+         listener(this.currentProgress);
+       });
+     }
+
+     /**
+      * Download and cache audio files from tour stops
+      */
+     private async cacheAudioFiles(tourStops: TourStop[]): Promise<string[]> {
+       const cache = await this.getCache();
+       if (!cache) throw new Error('Cache not available');
+
+       const audioUrls: string[] = [];
+       for (const stop of tourStops) {
+         if (stop.audioUrl) {
+           audioUrls.push(stop.audioUrl);
+         }
+       }
+
+       // Cache audio files
+       const cachedAudioUrls: string[] = [];
+       for (const url of audioUrls) {
+         try {
+           const response = await fetch(url);
+           if (response.ok) {
+             await cache.put(url, response.clone());
+             cachedAudioUrls.push(url);
+             this.updateProgress({
+               downloaded: this.currentProgress.downloaded + 1,
+             });
+           }
+         } catch (error) {
+           console.error(`Error caching audio ${url}:`, error);
+         }
+       }
+
+       return cachedAudioUrls;
+     }
+
+     /**
+      * Download and cache image files from tour stops
+      */
+     private async cacheImages(tourStops: TourStop[]): Promise<string[]> {
+       // Similar to cacheAudioFiles but for images
+       // Implementation omitted for brevity
+     }
+
+     /**
+      * Download all tour data for offline use
+      */
+     async downloadTourData(): Promise<boolean> {
+       if (!this.isSupported()) {
+         throw new Error('Your browser does not support offline caching');
+       }
+
+       try {
+         // Start download process
+         this.updateProgress({
+           total: 0,
+           downloaded: 0,
+           completed: false,
+           error: undefined,
+         });
+
+         // Fetch tour stops and route paths
+         const tourStopsResponse = await fetch('/api/tour-stops');
+         const tourStops: TourStop[] = await tourStopsResponse.json();
+         
+         const routePathsResponse = await fetch('/api/route-paths');
+         const routePaths: RoutePath[] = await routePathsResponse.json();
+
+         // Calculate total items to download
+         let totalItems = 2; // Tour stops and route paths
+         
+         // Count audio files and images
+         const audioUrls = tourStops
+           .filter(stop => stop.audioUrl)
+           .map(stop => stop.audioUrl as string);
+         totalItems += audioUrls.length;
+         
+         const imageUrls = tourStops.flatMap(stop => stop.images || []);
+         totalItems += imageUrls.length;
+
+         this.updateProgress({
+           total: totalItems,
+           downloaded: 0,
+         });
+
+         // Cache API endpoints
+         const cache = await this.getCache();
+         if (!cache) throw new Error('Cache not available');
+
+         // Cache tour stops API response
+         await cache.put('/api/tour-stops', tourStopsResponse.clone());
+         localStorage.setItem(STORAGE_KEYS.TOUR_STOPS, JSON.stringify(tourStops));
+         this.updateProgress({
+           downloaded: this.currentProgress.downloaded + 1,
+         });
+
+         // Cache route paths API response
+         await cache.put('/api/route-paths', routePathsResponse.clone());
+         localStorage.setItem(STORAGE_KEYS.ROUTE_PATHS, JSON.stringify(routePaths));
+         this.updateProgress({
+           downloaded: this.currentProgress.downloaded + 1,
+         });
+
+         // Cache audio files
+         const cachedAudioUrls = await this.cacheAudioFiles(tourStops);
+         localStorage.setItem(STORAGE_KEYS.AUDIO_FILES, JSON.stringify(cachedAudioUrls));
+
+         // Cache images
+         const cachedImageUrls = await this.cacheImages(tourStops);
+         localStorage.setItem(STORAGE_KEYS.IMAGES, JSON.stringify(cachedImageUrls));
+
+         // Store timestamp of last cache update
+         localStorage.setItem(STORAGE_KEYS.CACHE_TIMESTAMP, new Date().toISOString());
+
+         // Mark download as complete
+         this.updateProgress({
+           completed: true,
+         });
+
+         return true;
+       } catch (error) {
+         console.error('Error downloading tour data:', error);
+         this.updateProgress({
+           error: error instanceof Error ? error.message : 'Unknown error occurred',
+         });
+         return false;
+       }
+     }
+
+     /**
+      * Get cached tour stops
+      */
+     async getCachedTourStops(): Promise<TourStop[] | null> {
+       try {
+         const cachedData = localStorage.getItem(STORAGE_KEYS.TOUR_STOPS);
+         if (!cachedData) return null;
+         return JSON.parse(cachedData) as TourStop[];
+       } catch (error) {
+         console.error('Error retrieving cached tour stops:', error);
+         return null;
+       }
+     }
+
+     /**
+      * Get cached route paths
+      */
+     async getCachedRoutePaths(): Promise<RoutePath[] | null> {
+       try {
+         const cachedData = localStorage.getItem(STORAGE_KEYS.ROUTE_PATHS);
+         if (!cachedData) return null;
+         return JSON.parse(cachedData) as RoutePath[];
+       } catch (error) {
+         console.error('Error retrieving cached route paths:', error);
+         return null;
+       }
+     }
+
+     /**
+      * Get the last cache timestamp
+      */
+     getCacheTimestamp(): Date | null {
+       try {
+         const timestamp = localStorage.getItem(STORAGE_KEYS.CACHE_TIMESTAMP);
+         if (!timestamp) return null;
+         return new Date(timestamp);
+       } catch (error) {
+         console.error('Error retrieving cache timestamp:', error);
+         return null;
+       }
+     }
+
+     /**
+      * Clear all cached tour data
+      */
+     async clearCache(): Promise<boolean> {
+       try {
+         // Remove localStorage items
+         localStorage.removeItem(STORAGE_KEYS.TOUR_STOPS);
+         localStorage.removeItem(STORAGE_KEYS.ROUTE_PATHS);
+         localStorage.removeItem(STORAGE_KEYS.AUDIO_FILES);
+         localStorage.removeItem(STORAGE_KEYS.IMAGES);
+         localStorage.removeItem(STORAGE_KEYS.CACHE_TIMESTAMP);
+
+         // Delete cache
+         await caches.delete(this.cacheName);
+
+         return true;
+       } catch (error) {
+         console.error('Error clearing cache:', error);
+         return false;
+       }
+     }
+
+     /**
+      * Get the estimated size of cached data in MB
+      */
+     async getCacheSize(): Promise<number> {
+       try {
+         const cache = await this.getCache();
+         if (!cache) return 0;
+
+         const keys = await cache.keys();
+         let totalSize = 0;
+
+         for (const key of keys) {
+           const response = await cache.match(key);
+           if (response) {
+             const blob = await response.blob();
+             totalSize += blob.size;
+           }
+         }
+
+         // Convert bytes to MB
+         return totalSize / (1024 * 1024);
+       } catch (error) {
+         console.error('Error calculating cache size:', error);
+         return 0;
+       }
+     }
+   }
+
+   // Export singleton instance
+   export const cacheService = new CacheService();
+   ```
+
+4. **Update Settings Panel for Offline Management**:
+   Modify `client/src/components/SettingsPanel.tsx` to add offline management controls:
+
+   ```typescript
+   // Import statements omitted for brevity
+
+   export default function SettingsPanel() {
+     const { toast } = useToast();
+     const [kidsMode, setKidsMode] = useState(false);
+     const [showProgressBar, setShowProgressBar] = useState(false);
+     const [progress, setProgress] = useState<DownloadProgress>({
+       total: 0,
+       downloaded: 0,
+       completed: false,
+     });
+     const [cacheTimestamp, setCacheTimestamp] = useState<Date | null>(null);
+     const [cacheSize, setCacheSize] = useState<number>(0);
+     const [isDownloading, setIsDownloading] = useState(false);
+     const [offlineSupported, setOfflineSupported] = useState(false);
+
+     // Check if offline caching is supported
+     useEffect(() => {
+       setOfflineSupported(cacheService.isSupported());
+       updateCacheInfo();
+     }, []);
+     
+     // Update cache information
+     const updateCacheInfo = async () => {
+       setCacheTimestamp(cacheService.getCacheTimestamp());
+       setCacheSize(await cacheService.getCacheSize());
+     };
+
+     // Handle downloading tour content
+     const handleDownloadContent = async () => {
+       if (!offlineSupported) {
+         toast({
+           title: 'Offline mode not supported',
+           description: 'Your browser does not support offline functionality',
+           variant: 'destructive',
+         });
+         return;
+       }
+       
+       try {
+         setIsDownloading(true);
+         setShowProgressBar(true);
+         
+         // Add progress listener
+         const removeListener = cacheService.addProgressListener((progress) => {
+           setProgress(progress);
+           
+           if (progress.error) {
+             toast({
+               title: 'Download failed',
+               description: progress.error,
+               variant: 'destructive',
+             });
+             setIsDownloading(false);
+           } else if (progress.completed) {
+             toast({
+               title: 'Download complete',
+               description: 'All tour content is now available offline',
+             });
+             setIsDownloading(false);
+             updateCacheInfo();
+           }
+         });
+         
+         // Start download
+         await cacheService.downloadTourData();
+         
+         // Clean up listener
+         removeListener();
+       } catch (error) {
+         toast({
+           title: 'Download failed',
+           description: error instanceof Error ? error.message : 'Unknown error occurred',
+           variant: 'destructive',
+         });
+         setIsDownloading(false);
+       }
+     };
+     
+     // Handle clearing the cache
+     const handleClearCache = async () => {
+       try {
+         await cacheService.clearCache();
+         toast({
+           title: 'Cache cleared',
+           description: 'All offline content has been removed',
+         });
+         setShowProgressBar(false);
+         updateCacheInfo();
+       } catch (error) {
+         toast({
+           title: 'Failed to clear cache',
+           description: error instanceof Error ? error.message : 'Unknown error occurred',
+           variant: 'destructive',
+         });
+       }
+     };
+     
+     // Calculate progress percentage
+     const progressPercentage = progress.total > 0 
+       ? Math.round((progress.downloaded / progress.total) * 100) 
+       : 0;
+
+     return (
+       <div className="p-4 space-y-6">
+         {/* Kids Mode toggle and other settings omitted for brevity */}
+         
+         <Separator />
+         
+         <div className="space-y-4">
+           <h3 className="text-lg font-semibold">Offline Access</h3>
+           
+           {!offlineSupported && (
+             <div className="bg-amber-50 p-3 rounded-md border border-amber-200">
+               <p className="text-amber-800 text-sm">
+                 Your browser doesn't support offline functionality
+               </p>
+             </div>
+           )}
+           
+           {offlineSupported && (
+             <>
+               {cacheTimestamp && (
+                 <div className="text-sm text-muted-foreground mb-2">
+                   <p>Last updated: {formatDate(cacheTimestamp)}</p>
+                   <p>Cache size: {cacheSize.toFixed(2)} MB</p>
+                 </div>
+               )}
+               
+               {showProgressBar && (
+                 <div className="space-y-2 mb-4">
+                   <Progress value={progressPercentage} className="h-2" />
+                   <p className="text-xs text-muted-foreground text-right">
+                     {progress.downloaded} of {progress.total} items ({progressPercentage}%)
+                   </p>
+                 </div>
+               )}
+               
+               <div className="flex flex-col space-y-2">
+                 <Button
+                   onClick={handleDownloadContent}
+                   disabled={isDownloading}
+                   variant="outline"
+                   className="w-full"
+                 >
+                   {isDownloading ? 'Downloading...' : 'Download Tour Content'}
+                 </Button>
+                 
+                 <Button
+                   onClick={handleClearCache}
+                   disabled={isDownloading || !cacheTimestamp}
+                   variant="outline"
+                   className="w-full text-destructive border-destructive hover:bg-destructive/10"
+                 >
+                   Clear Offline Content
+                 </Button>
+               </div>
+             </>
+           )}
+         </div>
+       </div>
+     );
+   }
+   ```
+
+5. **Update the Tour Data Hook**:
+   Modify `client/src/hooks/useTourData.ts` to handle offline data retrieval:
+
+   ```typescript
+   import { useQuery } from '@tanstack/react-query';
+   import { TourStop, RoutePath } from '../../shared/schema';
+   import { useState, useEffect } from 'react';
+   import { cacheService } from '../lib/cacheService';
+
+   export const useTourData = () => {
+     const [isOffline, setIsOffline] = useState<boolean>(false);
+     
+     // Check for offline status
+     useEffect(() => {
+       const updateOnlineStatus = () => {
+         setIsOffline(!navigator.onLine);
+       };
+       
+       // Initial check
+       updateOnlineStatus();
+       
+       // Listen for online/offline events
+       window.addEventListener('online', updateOnlineStatus);
+       window.addEventListener('offline', updateOnlineStatus);
+       
+       return () => {
+         window.removeEventListener('online', updateOnlineStatus);
+         window.removeEventListener('offline', updateOnlineStatus);
+       };
+     }, []);
+
+     // Fetch tour stops with offline fallback
+     const tourStopsQuery = useQuery({
+       queryKey: ['/api/tour-stops'],
+       queryFn: async () => {
+         if (isOffline) {
+           const cachedStops = await cacheService.getCachedTourStops();
+           if (!cachedStops) throw new Error('No cached tour stops available');
+           return cachedStops;
+         }
+         
+         // Default fetching behavior from API
+         try {
+           const response = await fetch('/api/tour-stops');
+           if (!response.ok) throw new Error('Failed to fetch tour stops');
+           return response.json() as Promise<TourStop[]>;
+         } catch (error) {
+           // If network request fails, try the cache
+           const cachedStops = await cacheService.getCachedTourStops();
+           if (cachedStops) return cachedStops;
+           throw error;
+         }
+       },
+     });
+
+     // Fetch route paths with offline fallback (implementation similar to tourStopsQuery)
+     const routePathsQuery = useQuery({
+       queryKey: ['/api/route-paths'],
+       // Implementation omitted for brevity
+     });
+
+     // Sort tour stops by order number
+     const sortedTourStops = tourStopsQuery.data
+       ? [...tourStopsQuery.data].sort((a, b) => a.orderNumber - b.orderNumber)
+       : [];
+
+     return {
+       tourStops: sortedTourStops,
+       routePaths: routePathsQuery.data || [],
+       isLoading: tourStopsQuery.isLoading || routePathsQuery.isLoading,
+       error: tourStopsQuery.error || routePathsQuery.error,
+       isOffline,
+     };
+   };
+   ```
+
+## Step 15: Testing and Refinement
 
 Test the application thoroughly:
 1. Test the map view with geolocation
@@ -1097,5 +1817,10 @@ Test the application thoroughly:
 4. Test navigation between stops
 5. Test list view and stop selection
 6. Test responsive design on mobile devices
+7. Test offline functionality:
+   - Download tour content while online
+   - Enable airplane mode or disconnect from WiFi/data
+   - Verify that map, images, and audio work offline
+   - Test cache size estimation and clearing functionality
 
 Make refinements based on testing feedback to ensure a polished user experience.

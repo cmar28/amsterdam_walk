@@ -145,9 +145,12 @@ class CacheService {
     const cachedAudioUrls: string[] = [];
     for (const url of audioUrls) {
       try {
+        // Make a new fetch request for each URL
         const response = await fetch(url);
         if (response.ok) {
-          await cache.put(url, response.clone());
+          // Create a clone before using the response
+          const responseToCache = response.clone();
+          await cache.put(url, responseToCache);
           cachedAudioUrls.push(url);
           this.updateProgress({
             downloaded: this.currentProgress.downloaded + 1,
@@ -181,9 +184,12 @@ class CacheService {
     const cachedImageUrls: string[] = [];
     for (const url of imageUrls) {
       try {
+        // Make a new fetch request for each URL
         const response = await fetch(url);
         if (response.ok) {
-          await cache.put(url, response.clone());
+          // Create a clone before using the response
+          const responseToCache = response.clone();
+          await cache.put(url, responseToCache);
           cachedImageUrls.push(url);
           this.updateProgress({
             downloaded: this.currentProgress.downloaded + 1,
@@ -252,19 +258,34 @@ class CacheService {
       const cache = await this.getCache();
       if (!cache) throw new Error('Cache not available');
 
-      // Cache tour stops API response
-      await cache.put('/api/tour-stops', tourStopsResponse.clone());
-      localStorage.setItem(STORAGE_KEYS.TOUR_STOPS, JSON.stringify(tourStops));
-      this.updateProgress({
-        downloaded: this.currentProgress.downloaded + 1,
-      });
+      try {
+        // We need to make fresh requests to cache the API endpoints
+        const tourStopsResponseForCache = await fetch('/api/tour-stops');
+        if (tourStopsResponseForCache.ok) {
+          await cache.put('/api/tour-stops', tourStopsResponseForCache.clone());
+        }
+        
+        // Store the data in localStorage
+        localStorage.setItem(STORAGE_KEYS.TOUR_STOPS, JSON.stringify(tourStops));
+        this.updateProgress({
+          downloaded: this.currentProgress.downloaded + 1,
+        });
 
-      // Cache route paths API response
-      await cache.put('/api/route-paths', routePathsResponse.clone());
-      localStorage.setItem(STORAGE_KEYS.ROUTE_PATHS, JSON.stringify(routePaths));
-      this.updateProgress({
-        downloaded: this.currentProgress.downloaded + 1,
-      });
+        // Same for route paths
+        const routePathsResponseForCache = await fetch('/api/route-paths');
+        if (routePathsResponseForCache.ok) {
+          await cache.put('/api/route-paths', routePathsResponseForCache.clone());
+        }
+        
+        // Store the data in localStorage
+        localStorage.setItem(STORAGE_KEYS.ROUTE_PATHS, JSON.stringify(routePaths));
+        this.updateProgress({
+          downloaded: this.currentProgress.downloaded + 1,
+        });
+      } catch (error) {
+        console.error('Error caching API responses:', error);
+        throw error;
+      }
 
       // Cache audio files
       const cachedAudioUrls = await this.cacheAudioFiles(tourStops);

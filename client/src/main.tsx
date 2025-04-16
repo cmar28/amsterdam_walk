@@ -21,14 +21,23 @@ document.head.appendChild(howlerScript);
 
 // Register service worker for offline functionality
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then((registration) => {
-        console.log('Service Worker registration successful with scope: ', registration.scope);
-      })
-      .catch((err) => {
-        console.log('Service Worker registration failed: ', err);
-      });
+  window.addEventListener('load', async () => {
+    try {
+      // Check if service worker is already registered
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      
+      // Unregister any existing service workers to avoid conflicts
+      for (let registration of registrations) {
+        await registration.unregister();
+      }
+      
+      // Register our new service worker
+      const registration = await navigator.serviceWorker.register('/service-worker.js');
+      console.log('Service Worker registration successful with scope: ', registration.scope);
+    } catch (err) {
+      console.log('Service Worker registration failed: ', err);
+      // Service worker failed, but app can still function without offline support
+    }
   });
 }
 

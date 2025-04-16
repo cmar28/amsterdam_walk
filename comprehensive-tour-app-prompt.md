@@ -113,6 +113,14 @@ Create the following data models:
    - Image gallery navigation
    - Map interaction with zoom/pan controls
 
+5. **Offline Functionality**:
+   - Complete offline access to all tour content
+   - Download manager to pre-cache tour data, images, and audio files
+   - Service worker integration for network request interception
+   - Persistent cache that remains available after browser restart
+   - Progress tracking during download process
+   - Cache size estimation and management controls
+
 ## Server Implementation
 
 1. **API Endpoints**:
@@ -175,6 +183,7 @@ For each stop, include:
    - Implement useTourData hook for centralized data access
    - Sort stops by orderNumber for sequential presentation
    - Provide loading and error states
+   - Support for offline data retrieval from cache
 
 2. **Location Tracking**:
    - Implement useCurrentLocation hook for geolocation services
@@ -193,6 +202,15 @@ For each stop, include:
    - Implement on-demand loading for images
    - Provide fallbacks for missing media
    - Support transcript mode for accessibility
+   - Offline-first approach with cached media files
+
+5. **Offline Capability Implementation**:
+   - Service worker for network request interception
+   - Dual storage system using Cache Storage API and localStorage
+   - Download manager with progress tracking
+   - Cache size estimation and management
+   - Network status detection and appropriate UI feedback
+   - Graceful degradation when offline
 
 ## Development Guidelines
 
@@ -212,3 +230,7 @@ For each stop, include:
 - Support for both map view and list view of the tour stops
 - Permission handling for geolocation should be clear and user-friendly
 - Audio narration should have a consistent voice throughout the tour
+- Complete offline functionality to enable use abroad with minimal data usage
+- Caching system should persist even when browser is closed/reopened
+- Settings panel with offline management controls for tourists' convenience
+- Clear feedback on download progress and cache status
